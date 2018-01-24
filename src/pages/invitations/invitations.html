@@ -1,0 +1,165 @@
+<ion-header class="mo-innheader">
+</ion-header>
+
+
+<ion-content>
+    <div class="mo-datepg" *ngIf="invitation">
+        <div class="mo-inn">
+            <h1 class="mo-pghead">{{ (invitation.userId == userId) ? 'הזמנתי לדייט' : 'הזמנה לדייט' }}<span class="inv-status">{{ invitation.status }}</span></h1>
+
+            <div class="mo-picrgt">
+                <div class="thumb"><img src="{{ invitation.userMain }}" alt=""></div>
+            </div>
+            <div class="user-data">
+                <p>{{ invitation.userfName }}<br>
+                    {{ invitation.age }}, {{ invitation.userRegion }}<br>
+                    {{ invitation.userHeight }} ס״מ, {{invitation.userReligin}}, {{ invitation.userMaritalStatus }}<br>
+                </p>
+            </div>
+            <!-- end -->
+
+            <div class="mo-contlft">
+                <form>
+                    <!--<div class="mo-btmlink cf" *ngIf="invitation.approved != '1' && invitation.approved != '0' && invitation.userId != userId">-->
+                        <!--<a (click)="inviteSet(1)" class="redbtn-big">אישור הגעה</a>-->
+                        <!--<a (click)="inviteSet(0)" class="redbtn-big">סירוב</a>-->
+                        <!--<a (click)="inviteSet(2)" class="redbtn-big">קביעת דייט חדש</a>-->
+                    <!--</div>-->
+
+                    <div class="field">
+                        <label>תאריך הפגישה</label>
+                        <input type="number" class="txtbox num" value="{{ invitation.y }}" readonly>&nbsp;
+                        <input type="number" class="txtbox num" value="{{ invitation.m }}" readonly>&nbsp;
+                        <input type="number" class="txtbox num" value="{{ invitation.d }}" readonly>
+                    </div>
+
+                    <div class="field">
+                        <label>שעת הפגישה</label>
+                        <input type="number" class="txtbox num" value="{{ invitation.min }}" readonly> &nbsp;
+                        <input type="number" class="txtbox num" value="{{ invitation.h }}" readonly>
+                    </div>
+
+                    <div class="field">
+                        <label>אזור</label>
+                        <input type="text" class="txtbox" value="{{ invitation.region }}" readonly>
+                    </div>
+
+                    <div class="field"><label>מסעדה</label></div>
+
+                    <div class="mo-restau-list">
+                        <ul>
+                            <li>
+                                <div class="inn cf">
+                                    <a href="#" class="thumb"><img src="{{ invitation.photo }}" alt="user"></a>
+                                    <div class="cont">
+                                        <h4><a>{{ invitation.placeName }}</a></h4>
+                                        <a href="{{ invitation?.coupon_url }}" target="_blank" *ngIf="invitation?.isCoupon == '1'" class="imgbtn"></a>
+                                    </div>
+                                    <div class="clr"></div>
+                                    <div class="mo-cafe-adr">
+                                        <p>{{ invitation.placeStreet }}, {{ invitation.placeCity }}</p>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- end -->
+
+                    <div class="field" *ngIf="invitation.free_text">
+                        <label>מלל חופשי</label>
+                        <textarea cols="5" rows="5" placeholder="אשמח להיפגש במסעדת..." class="txtbox" readonly>{{ invitation.free_text }}</textarea>
+                    </div>
+
+                    <div class="mo-btmlink cf" *ngIf="invitation.approved != '1' && invitation.approved != '0' && invitation.userId != userId">
+                        <a (click)="inviteSet(1)" class="redbtn-big">אישור הגעה</a>
+                        <a (click)="inviteSet(0)" class="redbtn-big">סירוב</a>
+                        <a (click)="inviteSet(2)" class="redbtn-big">קביעת דייט חדש</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="mo-datepg" *ngIf="message">
+        <div class="mo-inn" id="form">
+            <h1 class="mo-pghead">{{ pageData.title }}</h1>
+
+            <div class="mo-picrgt">
+                <div class="thumb"><img src="{{ message.photo }}" alt=""></div>
+                <p>{{ message.name }}</p>
+            </div>
+            <!-- end -->
+
+            <div class="mo-contlft">
+                <p class="mo-note-done">{{ message.text }}</p>
+            </div>
+            <div class="txtleft mo-padd">
+                <a (click)="goToHome();" class="button mo-arow">{{ pageData.home_button_text }}</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="mo-msg mo-datepg" *ngIf="invitations && !invitation && !message">
+        <div class="mo-inn">
+            <!--<h1 class="mo-pghead">{{ pageData.title }}</h1>-->
+            <div class="mo-msglist alerts">
+                <div class="tabs">
+                    <ion-segment [(ngModel)]="tabs">
+                        <ion-segment-button value="i_invite">
+                            הזמנתי לדייט
+                        </ion-segment-button>
+                        <ion-segment-button value="invite_me">
+                            הזמנה לדייט
+                        </ion-segment-button>
+                    </ion-segment>
+                </div>
+                <div [ngSwitch]="tabs">
+                    <div *ngSwitchCase="'invite_me'">
+                        <div *ngIf="invite.invite_me.length == 0" class="no-results">{{ pageData.no_results }}</div>
+                        <ul *ngIf="invite.invite_me.length > 0">
+                            <li *ngFor="let invit of invite.invite_me" [ngClass]="{'active': invit.isRead != '1'}">
+                                <div class="inn cf {{ 'date_' + invit.dateInviteId }}" (click)="readInvitatio(invit);">
+                                    <a class="thumb"><img src="{{ invit.userMain }}" alt="user"></a>
+                                    <div class="cont">
+                                        <h4 [ngClass]="{'mo-online-bef': invit.isOnline == '1'}"><a>{{ invit.userfName }}</a></h4>
+                                        <div class="date">{{ invit?.date_str1 }}</div>
+                                        <div class="clr"></div>
+                                        <p>{{ invit.age }}, {{ invit.userRegion }}<br>
+                                            {{ invit.userHeight }} ס״מ, {{invit.userReligin}}, {{ invit.userMaritalStatus }}<br>
+                                            <strong>הזמנה לדייט:</strong>  בתאריך {{ invit.d + '.' + invit.m + '.' + invit.y + ' ' + invit.h + ':' + invit.min }} ב{{ invit.placeName + ' ' + invit.placeStreet + ', ' + invit.placeCity }}
+                                        </p>
+                                        <p class="status">
+                                            {{ invit.status }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div *ngSwitchCase="'i_invite'">
+                        <div *ngIf="invite.i_invite.length == 0" class="no-results">{{ pageData.no_results }}</div>
+                        <ul *ngIf="invite.i_invite.length > 0">
+                            <li *ngFor="let invit of invite.i_invite" [ngClass]="{'active': invit.isRead != '1'}">
+                                <div class="inn cf {{ 'date_' + invit.dateInviteId }}" (click)="readInvitatio(invit,0);">
+                                    <a class="thumb"><img src="{{ invit.userMain }}" alt="user"></a>
+                                    <div class="cont">
+                                        <h4 [ngClass]="{'mo-online-bef': invit.isOnline == '1'}"><a>{{ invit.userfName }}</a></h4>
+                                        <div class="date">{{ invit?.date_str1 }}</div>
+                                        <div class="clr"></div>
+                                        <p>{{ invit.age }}, {{ invit.userRegion }}<br>
+                                            {{ invit.userHeight }} ס״מ, {{invit.userReligin}}, {{ invit.userMaritalStatus }}<br>
+                                            <strong>הזמנה לדייט:</strong>  בתאריך {{ invit.d + '.' + invit.m + '.' + invit.y + ' ' + invit.h + ':' + invit.min }} ב{{ invit.placeName + ' ' + invit.placeStreet + ', ' + invit.placeCity }}
+                                        </p>
+                                        <p class="status">
+                                            {{ invit.status }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ion-content>

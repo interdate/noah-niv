@@ -1,0 +1,22 @@
+<ion-header class="mo-innheader">
+</ion-header>
+
+<ion-content>
+  <ion-slides (ionSlideDidChange)="slideChanged()" *ngIf="showUsers?.length > 0" loop="false" effect="slide" centeredSlides="true">
+    <ion-slide *ngFor="let user of showUsers">
+      <div class="arena-img" [ngStyle]="{'background-image': 'url(' + user?.main + ')'}"></div>
+      <h4><span (click)="arenaClick('profile')">{{ user?.userfName }}</span>, {{ user?.age }}</h4>
+    </ion-slide>
+  </ion-slides>
+  <div class="mo-updown txtcenter" *ngIf="showUsers.length > 0">
+    <a (click)="arenaClick('unlike')"><img src="images/thumb-down.png" alt=""></a>
+    <a (click)="arenaClick('chat')"><img src="images/icon-mail.png" alt=""></a>
+    <a (click)="arenaClick('like')"><img src="images/thumb-up.png" alt=""></a>
+  </div>
+  <div *ngIf="users?.no_results && showUsers.length == 0" class="not-users">
+    <div class="wrap-users">
+      <div class="no-results">{{ users.no_results }}</div>
+    </div>
+  </div>
+
+</ion-content>

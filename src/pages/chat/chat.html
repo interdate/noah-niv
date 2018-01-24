@@ -1,0 +1,40 @@
+<!--
+  Generated template for the ChatPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header class="mo-innheader">
+
+</ion-header>
+
+
+<ion-content>
+    <div class="mo-msg">
+        <div class="mo-inn">
+            <h1 class="mo-pghead">
+                <div class="image-user" [ngStyle]="{'background-image': 'url(' + user.main + ')'}"></div>
+                {{ pageData.title }} <a (click)="profile();">{{ user.userfName }}</a>
+            </h1>
+            <div id="dialog" *ngIf="chat?.items">
+                <div class="messageSection" *ngFor="let mes of chat.items;">
+                    <div class="marR_20 message chatbox" id="message-{{ mes.id }}" [ngClass]="{'even': mes.from == user.id, 'odd': mes.to == user.id}">
+                        <div class="status_cont">
+                            <div *ngIf="mes.to == user.id" class="status {{ mes.readClass }}"></div>
+                        </div>
+                        <div class="text_{{ mes.id }}">{{ setText(mes) }}</div>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="dateTime" [ngClass]="{'even': mes.from == user.id, 'odd': mes.to == user.id}">נשלח ב {{ mes.date }} בשעה {{ mes.time }}</div>
+                    <div class="hideMessage" [ngClass]="{'left': mes.from == user.id, 'right': mes.to == user.id}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ion-content>
+
+<ion-footer padding>
+
+    <textarea name="mes" id="mes" [(ngModel)]="message"></textarea>
+    <button name="submit" id="send-button" (click)="send()">שלח</button>
+</ion-footer>

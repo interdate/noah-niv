@@ -1,0 +1,328 @@
+// http://ionicframework.com/docs/theming/
+
+
+// App Global Sass
+// --------------------------------------------------
+// Put style rules here that you want to apply globally. These
+// styles are for the entire app and not just one component.
+// Additionally, this file can be also used as an entry point
+// to import other Sass files to be included in the output CSS.
+//
+// Shared Sass variables, which can be used to adjust Ionic's
+// default Sass variables, belong in "theme/variables.scss".
+//
+// To declare rules for a specific mode, create a child rule
+// for the .md, .ios, or .wp mode classes. The mode class is
+// automatically applied to the <body> element in the app.
+
+$mobile_url: 'http://m.noah.kosherdate.co.il/';
+
+.mo-innheader.header-ios.old-v, .content.content-ios.old-v{
+  margin-top: 15px;
+}
+
+.no-results{
+  text-align: center;
+  border: 1px red solid;
+  padding: 10px 5px;
+}
+
+.ion-page{
+  background-color: #282f39;
+  background-image: url(../images/signinbg.jpg);
+  background-repeat: no-repeat;
+  background-position: center 80px;
+  background-size: cover;
+}
+
+.top-buttons-area{
+  background: #fff;
+  position: relative;
+  width: 100%;
+  padding-top: 3px;
+  margin-top: 15px;
+}
+
+.not-login .top-buttons-area{
+  display: none;
+}
+
+#my_arena {
+  position: relative;
+  z-index: 999;
+  display: inline-block;
+  width: 49.4%;
+  height: 55px;
+  background-image: url('../images/notif_button.png');
+  background-repeat: no-repeat;
+  //background-size: contain;
+  background-position: center;
+}
+
+.mo-notify{
+  display: none;
+}
+
+#invitations{
+  /*display: none;*/
+  position: relative;
+  display: inline-block;
+  width: 49.4%;
+  height: 55px;
+  z-index: 999;
+  background-image: url('../images/dating_button.png');
+  background-repeat: no-repeat;
+  //background-size: contain;
+  background-position: center;
+}
+
+#my_arena .counter{
+  right: auto;
+  left: 38%;
+}
+
+.counter{
+  display: none;
+  position: absolute;
+  background: #189dbc;
+  color: #fff;
+  padding: 3.5px 0px;
+  font-size: 12px;
+  right: 37%;
+  border: 2px solid #282f39;
+  bottom: 0px;
+  z-index: 9999;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  line-height:1;
+  text-align: center;
+}
+
+.err {
+  font-size: 12px;
+  color: red;
+  padding: 10px 0px;
+  text-align: center;
+  border: 1px red solid;
+  margin: 5px;
+}
+
+.success{
+  font-size: 12px;
+  color: #fff;
+  padding: 10px 0px;
+  text-align: center;
+  background: #3ea7c3;
+  border: 1px #fff solid;
+  margin: 5px;
+}
+
+#contact{
+  left: auto;
+  right: 15px;
+  line-height: 30px;
+}
+
+.submit-big{
+  font-size: 25px;
+  height: 55px;
+  background-size: 100% 100%;
+  width: auto;
+  padding: 0px 15px 5px 20px;
+  float: none;
+  display: inline-block;
+}
+
+.maincontent{
+  padding: 5px 0px;
+}
+
+.stepnum {
+  padding: 10px 0;
+}
+
+.formdiv .txtcenter {
+  padding-bottom: 10px;
+  font-size: 16px;
+}
+
+.birthday ion-item.item-block{
+  width: 32%;
+  margin-left: 0px;
+  display: inline-block;
+  padding-left: 2%;
+  box-sizing: content-box;
+}
+
+.birthday ion-item.item-block:last-child{
+  padding-left: 0px;
+}
+
+.birthday ion-item.item-block .item-inner, .field ion-item.item-block .item-inner{
+  border: none;
+  padding-right: 0px;
+}
+
+.frmbtm .birthday ion-item.item-block .item-inner ion-select, .field ion-item.item-block .item-inner ion-select{
+  width: 100%;
+  height: 40px;
+  max-width: 100%;
+  box-shadow: none;
+  padding: 10px 8px 10px 16px;
+}
+
+.frmbtm .birthday ion-item.item-block .item-inner ion-select .select-icon, .field > ion-item.item-block .item-inner ion-select .select-icon{
+  display: none;
+}
+
+.field > ion-item.item-block{
+  padding: 0px;
+}
+
+.submit-big.rgt{
+  background-size: 100% 100%;
+  padding: 0px 20px 5px 15px;
+  height: 46px;
+  float: none;
+  display: inline-block;
+}
+
+.submit-big.small{
+  height: 46px;
+}
+
+.field ion-select .select-placeholder {
+  color: #000;
+}
+
+.alert-checkbox-group .alert-checkbox .alert-checkbox-icon{
+  margin: 10px 16px 10px 6px;
+}
+
+.alert-md .alert-checkbox-label{
+  padding: 13px 10px;
+}
+
+.alert-md .alert-checkbox-icon {
+  left: 0px;
+}
+
+.alert-button-group .alert-button{
+  width: auto;
+}
+
+.error{
+  border: 1px red solid;
+}
+
+.errText {
+  font-size: 12px;
+  color: red;
+  padding: 0px;
+  text-align: center;
+  margin: 5px;
+}
+
+label{
+  font-family: 'Assistant',Arial, sans-serif;
+}
+
+h1{margin: 0px;}
+
+#splashBingo {
+  position: fixed;
+  z-index: 9999;
+  width: 100%;
+  min-height: 100%;
+  //background: rgba(0,0,0,0.7);
+  background: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  top: 0px;
+  right: 0px;
+}
+
+.cancel {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 50px;
+  height: 50px;
+  background: url(../images/bingo/close.png) no-repeat center;
+  background-size: 60% 60%;
+}
+
+#splashBingo .bingoImg {
+  margin: 60px auto 10px;
+  width: 60%;
+  max-width: 230px;
+}
+
+.clear {
+  clear: both;
+}
+
+#splashBingo .rightPhoto {
+  width: 45%;
+  float: right;
+}
+
+#splashBingo .imageBingo {
+  background-position: top center;
+  background-size: cover;
+  width: 105px;
+  height: 105px;
+  border: 5px #fff solid;
+  border-radius: 50%;
+  margin: 0px auto;
+}
+
+#splashBingo .leftPhoto {
+  width: 45%;
+  float: left;
+}
+
+#splashBingo .plus {
+  float: right;
+  width: 11.5%;
+  height: 115px;
+  text-align: center;
+  background: url(../images/bingo/plus.png) no-repeat center;
+  background-size: contain;
+  margin-right: -1.5%;
+}
+
+#splashBingo .textSplash {
+  color: #fff;
+  text-align: center;
+  font-size: 20px;
+  margin: 10px 0px 20px;
+}
+
+#splashBingo .chat {
+  background-image: url(../images/bingo/chatSplash.png);
+}
+
+#splashBingo .ignore {
+  background-image: url(../images/bingo/ignoreSplash.png);
+}
+
+#splashBingo .ignore, #splashBingo .chat {
+  height: 45px;
+  width: 100%;
+  margin-top: 7px;
+  background-size: auto 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+#splashBingo .ignore span, #splashBingo .chat span{
+  color: #fff;
+  line-height: 32px;
+  padding-left: 25px;
+  font-size: 17px;
+}
+
+#splashBingo .chat span{
+  padding-left: 55px;
+}

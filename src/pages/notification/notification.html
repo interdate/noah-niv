@@ -1,0 +1,29 @@
+<ion-header class="mo-innheader">
+</ion-header>
+
+
+<ion-content>
+    <div class="mo-msg">
+        <div class="mo-inn">
+            <h1 class="mo-pghead">{{ pageData.title }}</h1>
+            <div class="mo-msglist alerts">
+                <div *ngIf="notifications?.items?.length == 0" class="no-results">{{ pageData.no_results }}</div>
+                <ul *ngIf="notifications?.items?.length > 0">
+                    <li *ngFor="let user of notifications?.items" [ngClass]="{'active': user.isRead == '0'}">
+                        <div class="inn cf {{ 'notificat_' + user.id }}" (click)="notifClick(user);">
+                            <a class="thumb"><img src="{{ user.main }}" alt="user"></a>
+                            <div class="cont">
+                                <h4 class="mo-online-bef"><a>{{ user.userfName }}</a></h4>
+                                <div class="date">{{ user.date }}</div>
+                                <div class="clr"></div>
+                                <p>
+                                    {{ user.template }}
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</ion-content>

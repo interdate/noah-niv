@@ -1,0 +1,204 @@
+<!--
+  Generated template for the RegisterPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header class="mo-innheader">
+</ion-header>
+
+<ion-content>
+    <div class="maincontent">
+        <div class="wrap">
+            <div class="pgstep">
+
+                <div class="stepnum">
+                    <ul>
+                        <li [ngClass]="{'active' : (form?.step && form?.step?.val == 1), 'pass': (form?.step && form?.step?.val != 1)}"
+                            class="rgt"><span>1</span>
+                            <p>{{ form?.text?.title1 }}</p></li>
+                        <li [ngClass]="{'active' : (form?.step && form?.step?.val == 2), 'pass': (form?.step && form?.step?.val == 3)}">
+                            <span>2</span>
+                            <p>{{ form?.text?.title2 }}</p></li>
+                        <li [ngClass]="{'active' : (form?.step && form?.step?.val == 3)}" class="lft"><span>3</span>
+                            <p>{{ form?.text?.title3 }}</p></li>
+                    </ul>
+                </div>
+
+                <div class="formdiv cf" *ngIf="user?.step < 3">
+                    <div *ngIf="errors && errors?.length != 0" class="err">יש למלא את כל השדות</div>
+                    <div *ngIf="form?.text?.h3 || form?.text?.html" class="txtcenter">
+                        <h3 *ngIf="form?.text?.h3">{{ form?.text?.h3 }}</h3>
+                        <div *ngIf="form?.text?.html" id="html">{{ setHtml('html',form?.text?.html) }}</div>
+                    </div>
+                    <form>
+                        <div *ngFor="let field of form?.fields">
+
+                            <div class="field" *ngIf="field.type == 'submit'" style="text-align: center;">
+                                <input *ngIf="user?.step > 1 && user?.register" type="submit" (click)="stepBack();"
+                                       value="חזרה" class="submit-big rgt">
+                                <input type="submit" (click)="sendForm();"
+                                       [ngClass]="{'small': user?.step > 1 && user?.register}" value="{{ field.label }}"
+                                       class="submit-big"/>
+                            </div>
+
+                            <div class="field" *ngIf="field.type == 'checkbox'"
+                                 [ngClass]="{'error': errors[field.name]}">
+                                <div>
+                                    <input type="checkbox" [id]="field.name" name="{{ field.name }}"
+                                           [(ngModel)]="user[field.name]"/>
+                                    <label for="{{ field.name }}" [id]="'label' + field.name "
+                                           style="padding-bottom: 0px;">{{ this.setHtml('label' + field.name,
+                                        field.label) }}</label>
+                                </div>
+                                <div *ngIf="errors[field.name]" class="errText">{{errors[field.name] }}</div>
+                            </div>
+
+                            <div class="field" *ngIf="field.type == 'select' && field.name != 'userCity' && field.name != 'countryOfOriginId'"
+                                 [ngClass]="{'error': errors[field.name]}">
+                                <label>{{ field.label }}</label>
+                                <!--<ion-item>-->
+                                    <!--interface="popover"-->
+                                    <select class="select2" name="{{ field.name }}" style="width: 100%;"
+                                                [(ngModel)]="user[field.name]" id="{{ field.name }}">
+                                        <option value=""></option>
+                                        <option *ngFor="let option of field.choices;" value="{{ option.val }}">{{
+                                            option.label }}
+                                        </option>
+                                    </select>
+                                <!--</ion-item>-->
+                                <div *ngIf="errors[field.name]" class="errText">{{errors[field.name] }}</div>
+                            </div>
+
+                            <div class="field" *ngIf="field.type == 'multiselect'"
+                                 [ngClass]="{'error': errors[field.name]}">
+                                <label>{{ field.label }}</label>
+                                <ion-item>
+                                    <ion-select okText="אישור" cancelText="ביטול" data-placeholder=""
+                                                interface="alert" multiple="true" [selectOptions]="{title: field.label}"
+                                                name="{{ field.name }}" [(ngModel)]="user[field.name]"
+                                                id="{{ field.name }}">
+                                        <ion-option *ngFor="let option of field.choices;" value="{{ option.val }}">{{
+                                            option.label }}
+                                        </ion-option>
+                                    </ion-select>
+                                </ion-item>
+                                <div *ngIf="errors[field.name]" class="errText">{{errors[field.name] }}</div>
+                            </div>
+
+                            <div class="field" *ngIf="field.name == 'userCity' || field.name == 'countryOfOriginId'"
+                                 [ngClass]="{'error': errors[field.name]}">
+                                <label>{{ field.label }}</label>
+                                <select class="select test chosen-rtl" data-placeholder="בחר מהרשימה" name="{{ field.name }}" [(ngModel)]="user[field.name]" id="{{ field.name }}">
+                                    <option value=""></option>
+                                    <option *ngFor="let option of field.choices;" value="{{ option.val }}">{{
+                                        option.label }}
+                                    </option>
+                                  </select>
+                                <div *ngIf="errors[field.name]" class="errText">{{errors[field.name] }}</div>
+                            </div>
+
+                            <div class="field" *ngIf="field.type == 'textarea'"
+                                 [ngClass]="{'error': errors[field.name]}">
+                                <label>{{ field.label }}</label>
+                                <textarea placeholder="{{ field.label }}" class="txtbox big" cols="2" rows="2"
+                                          name="{{ field.name }}" [(ngModel)]="user[field.name]"
+                                          id="{{ field.name }}"></textarea>
+                                <div *ngIf="errors[field.name]" class="errText">{{errors[field.name] }}</div>
+                            </div>
+
+                            <div *ngIf="field.type == 'text' || field.type == 'password'" class="field"
+                                 [ngClass]="{'error': errors[field.name]}">
+                                <label>{{ field.label }}</label>
+                                <input type="{{ field.type }}" value="1" placeholder=""
+                                       [(ngModel)]="user[field.name]" name="{{ field.name }}" id="{{ field.name }}"
+                                       class="txtbox"/>
+                                <div *ngIf="errors[field.name]" class="errText">{{errors[field.name] }}</div>
+                            </div>
+
+                            <div *ngIf="field.type == 'selects'" class="frmbtm" style="padding: 0px;">
+                                <div class="field" [ngClass]="{'error': errors[field.name]}">
+                                    <label>{{ field.label }}</label>
+                                    <div class="birthday">
+                                        <ion-item *ngFor="let select of field.sel">
+                                            <ion-select okText="אישור" cancelText="ביטול" interface="popover"
+                                                        class="sml3" name="{{ select.name }}"
+                                                        [(ngModel)]="user[select.name]" id="{{ select.name }}">
+                                                <ion-option *ngFor="let option of select.choices;"
+                                                            value="{{ option.val }}">{{ option.label }}
+                                                </ion-option>
+                                            </ion-select>
+                                        </ion-item>
+                                    </div>
+                                    <div *ngIf="errors[field.name]" class="errText">{{errors[field.name] }}</div>
+                                </div>
+
+                            </div>
+
+                            <div *ngIf="field.type == 'range-input'" class="field" [ngClass]="{'error': (errors[field.name1] || errors[field.name2])}">
+                                <label>{{ field.label }}</label>
+                                <div style="width:43%; float:right;">
+                                    <input type="text" class="txtbox" [(ngModel)]="user[field.name1]" name="{{ field.name1 }}" id="{{ field.name1 }}" maxlength="3">
+                                </div>
+                                <div style="float:right; width: 14%;font-size:15px;line-height:40px;text-align:center;">{{ field.subLabel }}</div>
+                                <div style="width:43%; float:right;">
+                                    <input type="text" class="txtbox" [(ngModel)]="user[field.name2]" name="{{ field.name2 }}" id="{{ field.name2 }}" maxlength="3">
+                                </div>
+                                <div *ngIf="errors[field.name1]" class="errText">{{ errors[field.name1] }}</div>
+                                <div *ngIf="!errors[field.name1] && errors[field.name2]" class="errText">{{ errors[field.name2] }}</div>
+                            </div>
+
+
+
+                        </div>
+                    </form>
+                </div>
+
+                <div class="formdiv cf" *ngIf="user?.step == 3">
+                    <div class="photos">
+                        <div *ngFor="let photo of user.photos; let i = index;">
+                            <div *ngIf="i == 0"  class="main photo" (click)="edit(photo)">
+                                <div class="wrap" >
+                                    <div *ngIf="user.noPhoto != photo.url" class="photo-img" [ngStyle]="{ 'background-image': 'url(' + photo.url + ')'}"></div>
+                                    <div *ngIf="user.noPhoto == photo.url" class="photo-img" [ngStyle]="{ 'background-image': 'url(images/1_' + user.userGender + '.png)'}"></div>
+                                    <span class="num">{{ i + 1 }}</span>
+                                    <div class="remove" *ngIf="user.noPhoto != photo.url"><ion-icon name="create"></ion-icon></div>
+                                    <span class="add" *ngIf="user.noPhoto == photo.url"><ion-icon name="md-add"></ion-icon></span>
+                                </div>
+                            </div>
+
+                            <div *ngIf="i != 0 && user.noPhoto != user.photos[0].url" class="photo" (click)="edit(photo)">
+                                <div class="wrap">
+                                    <div class="photo-img" *ngIf="user.noPhoto != photo.url" [ngStyle]="{ 'background-image': 'url(' + photo.url + ')'}"></div>
+                                    <div class="photo-img" *ngIf="user.noPhoto == photo.url" [ngStyle]="{ 'background-image': 'url(images/' + photo.type + '_' + user.userGender + '.png)'}"></div>
+                                    <span class="num">{{ i + 1 }}</span>
+                                    <div class="remove" *ngIf="user.noPhoto != photo.url"><ion-icon name="create"></ion-icon></div>
+                                    <span class="add" *ngIf="user.noPhoto == photo.url"><ion-icon name="md-add"></ion-icon></span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!--<div *ngIf="user.photos?.length > 0 && user.noPhoto != user.photos[0].url" class="photo" (click)="add()">-->
+                            <!--<div class="wrap">-->
+                                <!--<div class="photo-img"-->
+                                     <!--[ngStyle]="{ 'background-image': 'url(' + user.noPhoto + ')'}"></div>-->
+                                <!--<span class="num">{{ user.photos?.length + 1 }}</span>-->
+                                <!--<span class="add"><ion-icon name="md-add"></ion-icon></span>-->
+                            <!--</div>-->
+                        <!--</div>-->
+
+                        <!--<div *ngIf="user.photos?.length == 1 && user.noPhoto == user.photos[0].url"  class="main photo" (click)="add()">-->
+                            <!--<div class="wrap" >-->
+                                <!--<div class="photo-img" [ngStyle]="{ 'background-image': 'url('+ user.noPhoto + ')'}"></div>-->
+                                <!--<span class="num">1</span>-->
+                                <!--<span class="add"><ion-icon name="md-add"></ion-icon></span>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    </div>
+                </div>
+                <div *ngIf="user?.register && user?.step == 3" class="end-register" (click)="goToHome();">סיום הרשמה</div>
+            </div>
+        </div>
+    </div>
+</ion-content>

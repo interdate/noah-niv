@@ -1,0 +1,52 @@
+<ion-header class="mo-innheader">
+</ion-header>
+
+
+<ion-content>
+    <div class="mo-searchpg">
+        <div class="mo-inn">
+            <h1 class="mo-pghead">{{ form?.title }}</h1>
+
+            <form>
+                <div *ngFor="let field of form?.fields">
+                    <div class="field txtcenter" *ngIf="field.type == 'submit'">
+                        <input type="submit" (click)="goSearch();" value="{{ field.label }}" class="mo button big"/>
+                    </div>
+
+                    <div class="field" *ngIf="field.type == 'select'">
+                        <ion-item>
+                            <ion-select interface="popover" name="{{ field.name }}"
+                                        [(ngModel)]="search[field.name]" id="{{ field.name }}">
+                                <ion-option value="">{{ field.label }}</ion-option>
+                                <ion-option *ngFor="let option of field.choices;" value="{{ option.val }}">
+                                    {{ option.label }}
+                                </ion-option>
+                            </ion-select>
+                        </ion-item>
+                    </div>
+
+                    <div *ngIf="field.type == 'text'" class="field">
+                        <input type="{{ field.type }}" value="1" placeholder="{{ field.label }}"
+                               [(ngModel)]="search[field.name]" name="{{ field.name }}" id="{{ field.name }}"
+                               class="txtbox"/>
+                    </div>
+
+                    <div class="field" *ngIf="field.type == 'rangeinput'">
+                        <label>{{ field.label }}</label>
+                        <div class="field half mo-sml">
+                            <span>{{ field.label1 }}</span>
+                            <input type="text" [(ngModel)]="search[field.name1]" name="{{ field.name1 }}"
+                                   id="{{ field.name1 }}" class="txtbox"/>
+                        </div>
+                        <div class="field half mo-sml">
+                            <span>{{ field.label2 }}</span>
+                            <input type="text" [(ngModel)]="search[field.name2]" name="{{ field.name2 }}"
+                                   id="{{ field.name2 }}" class="txtbox"/>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</ion-content>

@@ -1,0 +1,150 @@
+<ion-header class="mo-innheader">
+
+</ion-header>
+
+
+<ion-content>
+    <div class="mo-datepg">
+        <div class="mo-inn" style="display: none" id="restorans">
+            <h1 class="mo-pghead">{{  chooseRes?.data?.title }}</h1>
+
+            <div class="mo-restau-top" id="rest-html"></div>
+            <!-- end -->
+
+            <div class="mo-restau-list">
+                <ul>
+                    <div *ngFor="let restor of chooseRes?.options">
+                        <li (click)="selectRestoran(restor);" *ngIf="invite?.countryRegionId == '' || invite?.countryRegionId == restor?.countryRegionId">
+                            <div class="inn cf">
+                                <a class="thumb"><img src="{{ restor?.photo }}" alt="user"></a>
+                                <div class="cont">
+                                    <h4><a href="#">{{ restor?.placeName }}</a></h4>
+                                    <a href="{{ restor?.coupon_url }}" target="_blank" *ngIf="restor?.isCoupon == '1'" class="imgbtn"></a>
+                                </div>
+                                <div class="clr"></div>
+                                <div class="description">{{ restor?.placeDesc }}</div>
+                                <div class="mo-cafe-adr">
+                                    <p>{{ restor?.placeStreet }}, {{ restor?.placeCity }}</p>
+                                </div>
+                                <div class="txtcenter cf">
+                                    <a class="redbtn-big">בחר במסעדה זו</a>
+                                </div>
+                            </div>
+                        </li>
+                    </div>
+                </ul>
+            </div>
+            <!-- end -->
+        </div>
+
+        <div class="mo-inn" *ngIf="pageData" id="form">
+            <h1 class="mo-pghead">{{ pageData.title }}</h1>
+
+            <div class="mo-picrgt">
+                <div class="thumb"><img src="{{ form.user.main }}" alt=""></div>
+                <p>{{ form.user.userfName }}</p>
+            </div>
+            <!-- end -->
+
+            <div class="mo-contlft" *ngIf="form.success">
+                <p class="mo-note-done">{{ form.success }}</p>
+            </div>
+            <div class="txtleft mo-padd" *ngIf="form.success">
+                <a (click)="goToHome();" class="button mo-arow">{{ pageData.home_button_text }}</a>
+            </div>
+
+            <div *ngIf="errors && errors?.length != 0" class="err">{{ pageData.error_text }}</div>
+
+            <div class="mo-contlft" *ngIf="!form.success">
+                <form name="invite">
+                    <div *ngFor="let field of form.fields">
+                        <div class="field" *ngIf="field.type == 'select'" [ngClass]="{'error': errors[field.name]}">
+                            <label>{{ field.label }}</label>
+                            <ion-item>
+                                <ion-select interface="popover" name="{{ field.name }}" [(ngModel)]="invite[field.name]" (ionChange)="invite.restoran = '';">
+                                    <option></option>
+                                    <ion-option *ngFor="let option of field.options;" value="{{ option.val }}">
+                                        {{ option.label }}
+                                    </ion-option>
+                                </ion-select>
+                            </ion-item>
+                            <div *ngIf="errors[field.name]" class="errText">{{errors[field.name] }}</div>
+                        </div>
+
+                        <div *ngIf="field.type == 'datetime'" >
+                            <ion-item style="display: none">
+                                <ion-datetime doneText="סיום" cancelText="ביטול" displayFormat="YYYY-MM-DD" pickerFormat="YYYY-MM-DD" min="{{ field.minDate }}" max="{{ field.maxDate }}" [(ngModel)]="inviteDate" name="inviteDate" (ionChange)="chooseDate(field);" id="invateDate"></ion-datetime>
+                            </ion-item>
+
+                            <ion-item style="display: none">
+                                <ion-datetime  doneText="סיום" cancelText="ביטול" id="invateTime" displayFormat="HH:mm" pickerFormat="mm HH" [(ngModel)]="inviteTime" name="inviteTime" (ionChange)="chooseTime(field);"></ion-datetime>
+                            </ion-item>
+
+                            <div class="field" (click)="clickByElement('#invateDate');" [ngClass]="{'error': errors[field.name_d] || errors[field.name_m] || errors[field.name_y]}">
+                                <label>{{ field.label1 }}</label>
+                                <input (click)="clickByElement('#invateDate');" type="number" class="txtbox num" name="{{ field.name_y }}" readonly [(ngModel)]="invite[field.name_y]"> &nbsp;
+                                <input (click)="clickByElement('#invateDate');" type="number" class="txtbox num" name="{{ field.name_m }}" readonly [(ngModel)]="invite[field.name_m]"> &nbsp;
+                                <input (click)="clickByElement('#invateDate');" type="number" class="txtbox num" name="{{ field.name_d }}" readonly [(ngModel)]="invite[field.name_d]">
+                                <div *ngIf="errors[field.name_d]" class="errText">{{errors[field.name_d] }}</div>
+                                <div *ngIf="errors[field.name_m] && !errors[field.name_d]" class="errText">{{ errors[field.name_m] }}</div>
+                                <div *ngIf="errors[field.name_y] && !errors[field.name_d] && !errors[field.name_m]" class="errText">{{ errors[field.name_y] }}</div>
+                            </div>
+
+                            <div class="field" (click)="clickByElement('#invateTime');" [ngClass]="{'error': errors[field.name_min] || errors[field.name_h]}">
+                                <label>{{ field.label2 }}</label>
+                                <input (click)="clickByElement('#invateTime');" type="number" class="txtbox num" name="{{ field.name_min }}" readonly [(ngModel)]="invite[field.name_min]"> &nbsp;
+                                <input (click)="clickByElement('#invateTime');" type="number" class="txtbox num" name="{{ field.name_h }}" readonly [(ngModel)]="invite[field.name_h]">
+                                <div *ngIf="errors[field.name_d]" class="errText">{{errors[field.name_min] }}</div>
+                                <div *ngIf="errors[field.name_m] && !errors[field.name_min]" class="errText">{{errors[field.name_h] }}</div>
+                            </div>
+                        </div>
+
+                        <div class="field" *ngIf="field.type == 'restorans'" [ngClass]="{'error': errors[field.name]}">
+                            <div><label>{{ field.label }}</label></div>
+                            <div class="mo-restau">
+                                <a (click)="restoranSel(field)">{{ field.text }}</a>
+                                <p></p>
+                            </div>
+                            <div class="mo-restau-list" *ngIf="invite[field.name] != ''">
+                                <ul>
+                                    <div *ngFor="let restoran of field.options">
+                                        <li *ngIf="restoran.placeId == invite[field.name]">
+                                            <div class="inn cf">
+                                                <a class="thumb"><img src="{{ restoran.photo }}" alt="user"></a>
+                                                <div class="cont">
+                                                    <h4><a >{{ restoran.placeName }}</a></h4>
+                                                    <a href="{{ restoran?.coupon_url }}" target="_blank" *ngIf="restoran.isCoupon == 1" class="imgbtn"></a>
+                                                </div>
+                                                <div class="clr"></div>
+                                                <div class="description">{{ restoran.placeDesc }}</div>
+                                                <div class="mo-cafe-adr">
+                                                    <p>{{ restoran.placeStreet }}, {{ restoran.placeCity }}</p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </div>
+                                </ul>
+                            </div>
+                            <div *ngIf="errors[field.name]" class="errText">{{errors[field.name] }}</div>
+                        </div>
+
+                        <div class="field" *ngIf="field.type == 'textarea'" [ngClass]="{'error': errors[field.name]}">
+                            <label>{{ field.label }}</label>
+                            <textarea cols="5" rows="5" placeholder="{{ field.placeholder }}" class="txtbox" name="{{ field.name }}" [(ngModel)]="invite[field.name]"></textarea>
+                            <div *ngIf="errors[field.name]" class="errText">{{errors[field.name] }}</div>
+                        </div>
+
+                        <div class="field cf" *ngIf="field.type == 'submit'" (click)="sendInvite()">
+                            <input type="submit" class="submit2" value="{{ field.label }}">
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+            <!-- end -->
+
+        </div>
+    </div>
+
+</ion-content>

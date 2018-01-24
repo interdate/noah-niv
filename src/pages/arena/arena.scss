@@ -1,0 +1,39 @@
+page-arena {
+  .arena-img{
+    width: 100%;
+    height: calc(100% - 40px);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+  }
+  .slide-zoom{
+    height: 100%;
+  }
+  ion-slides{
+    height: calc(100% - 62px);
+  }
+  .content.content-ios ion-slides{
+    height: calc(100% - 80px);
+  }
+  ion-slides, ion-slides *{
+    direction: ltr;
+  }
+  h4{
+    margin: 7px 0px 7px;
+  }
+  h4 a{
+    color: inherit;
+    text-decoration: underline;
+  }
+
+  .not-users{
+    display: table;
+    width: 100%;
+    height: 300px;
+    padding: 10px;
+  }
+  .not-users .wrap-users{
+    display: table-cell;
+    vertical-align: middle;
+  }
+}
