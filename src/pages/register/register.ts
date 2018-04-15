@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
-import {ActionSheetController, Content, IonicPage, NavController, NavParams, Platform} from 'ionic-angular';
+import {ActionSheetController, Content, NavController, NavParams, Platform} from 'ionic-angular';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
-import { File } from '@ionic-native/file';
+//import { File } from '@ionic-native/file';
 import { ImagePicker } from '@ionic-native/image-picker';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import {ApiQuery} from "../../library/api-query";
@@ -34,9 +34,9 @@ export class RegisterPage {
         public http: Http,
         public platform: Platform,
         private camera: Camera,
-        private imagePicker: ImagePicker,
+        public imagePicker: ImagePicker,
         private transfer: FileTransfer,
-        private file: File,
+        //private file: File,
         public actionSheetCtrl: ActionSheetController
     ) {
         api.storage.get('status').then((val) => {
@@ -57,7 +57,7 @@ export class RegisterPage {
         var header = this.api.setHeaders((this.login == 'login') ? true : false);
         //console.log(header);
         //alert(this.login);
-        if(typeof this.user != 'undefined' && this.user.step == 2) {
+        if(typeof this.user != 'undefined' && this.user.step != 3) {
             //this.user.userCity = $('#userCity').val();
             //this.user.countryOfOriginId = $('#countryOfOriginId').val();
             this.form.fields.forEach(field => {
@@ -94,7 +94,7 @@ export class RegisterPage {
                     this.api.storage.set('username',this.user.userEmail);
                     this.api.setHeaders(true,this.user.userEmail);
                 }
-                if(this.user.step == 2){
+                if(this.user.step != 3){
                     //this.choosen('#userCity,#countryOfOriginId');
 
                     this.form.fields.forEach(field => {
@@ -315,7 +315,7 @@ export class RegisterPage {
             maximumImagesCount: 1,
             width: 600,
             height: 600,
-            quality: 100
+            quality: 98
         };
 
         this.imagePicker.getPictures(options).then(
@@ -324,12 +324,14 @@ export class RegisterPage {
             },
 
             (err) => {
-                console.log('uh oh')
+                alert(JSON.stringify(err));
+
             }
         );
     }
 
     openCamera() {
+
         const options: CameraOptions = {
             quality: 100,
             destinationType: 1,

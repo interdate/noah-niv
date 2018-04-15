@@ -1,0 +1,14 @@
+{
+  "name": "תיבת נח",
+  "app_id": "",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  },
+  "proxies": [
+    {
+      "path": "/",
+      "proxyUrl": "http://m.dos2date.co.il/api/v1"
+    }
+  ]
+}

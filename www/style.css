@@ -804,3 +804,12 @@ a.button.big2 { line-height: 44px; }
 .msglist li h4 { float: none; padding: 10px 0; }
 .msglist li .date { float: none; padding-bottom: 10px; }
 }
+
+.mo-inn .button.mo.login-register {
+	width: calc(100% - 25px);
+	background: #189dbc;
+	margin: 0px 0px 20px;
+	font-size: 20px;
+	padding: 5px 0;
+	direction: ltr;
+}

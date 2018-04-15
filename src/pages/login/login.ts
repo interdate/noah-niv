@@ -133,14 +133,18 @@ export class LoginPage {
         this.navCtrl.push(RecoveryPage);
     }
 
+    goToRegister(){
+        this.navCtrl.push(RegisterPage);
+    }
+
     ionViewDidLoad() {
         console.log('ionViewDidLoad LoginPage');
     }
 
     ionViewWillEnter() {
         this.api.activePageName = 'LoginPage';
-        $('#register,#contact').show();
-        $('#back,#logout').hide();
+        $('#contact').show();
+        $('#back,#logout,#register').hide();
         $('.header').addClass('not-login');
         //alert($('.header').height());
         setTimeout(function () {

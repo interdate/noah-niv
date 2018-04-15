@@ -32,7 +32,7 @@ export class ApiQuery {
                 public http: Http,
                 private sanitizer: DomSanitizer) {
 
-        //this.url = 'http://localhost:8103';
+        //this.url = 'http://localhost:8101';
         this.url = 'http://m.dos2date.co.il/api/v1';
         this.storage.get('user_id').then((val) => {
             this.storage.get('username').then((username) => {

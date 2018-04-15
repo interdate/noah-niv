@@ -4,7 +4,7 @@ import * as $ from "jquery";
 import {ApiQuery} from "../../library/api-query";
 import {Http} from "@angular/http";
 import {HomePage} from "../home/home";
-import set = Reflect.set;
+//import set = Reflect.set;
 
 
 

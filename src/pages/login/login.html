@@ -4,7 +4,7 @@
 
 <ion-content>
   <div class="mo-signin">
-    <div class="mo-inn">
+    <div class="mo-inn" style="text-align: center;">
       <h1 class="mo-pghead"></h1>
 
       <form class="frm">
@@ -13,6 +13,7 @@
           <h2>כניסה עם משתמש קיים</h2>
           <p>לביצוע כניסה ראשונית בלבד נא להכניס את פרטי המשתמש שלך</p>
         </div>
+        <a (click)="goToRegister();" class="mo button big login-register ui-link">!להרשמה חינם</a>
         <div class="field">
           <input [(ngModel)]="email" name="email" type="text" placeholder="הקלד דוא״ל" class="txtbox">
         </div>

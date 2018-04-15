@@ -91,8 +91,8 @@
                                 <label>{{ field.label }}</label>
                                 <select class="select test chosen-rtl" data-placeholder="בחר מהרשימה" name="{{ field.name }}" [(ngModel)]="user[field.name]" id="{{ field.name }}">
                                     <option value=""></option>
-                                    <option *ngFor="let option of field.choices;" value="{{ option.val }}">{{
-                                        option.label }}
+                                    <option *ngFor="let option of field.choices;" value="{{ option.val }}">
+                                        {{option.label }}
                                     </option>
                                   </select>
                                 <div *ngIf="errors[field.name]" class="errText">{{errors[field.name] }}</div>
@@ -162,12 +162,12 @@
                                     <div *ngIf="user.noPhoto != photo.url" class="photo-img" [ngStyle]="{ 'background-image': 'url(' + photo.url + ')'}"></div>
                                     <div *ngIf="user.noPhoto == photo.url" class="photo-img" [ngStyle]="{ 'background-image': 'url(images/1_' + user.userGender + '.png)'}"></div>
                                     <span class="num">{{ i + 1 }}</span>
-                                    <div class="remove" *ngIf="user.noPhoto != photo.url"><ion-icon name="create"></ion-icon></div>
+                                    <div class="remove" *ngIf="user?.noPhoto != photo.url"><ion-icon name="create"></ion-icon></div>
                                     <span class="add" *ngIf="user.noPhoto == photo.url"><ion-icon name="md-add"></ion-icon></span>
                                 </div>
                             </div>
 
-                            <div *ngIf="i != 0 && user.noPhoto != user.photos[0].url" class="photo" (click)="edit(photo)">
+                            <div *ngIf="i != 0 && user.noPhoto != user.photos[0]?.url" class="photo" (click)="edit(photo)">
                                 <div class="wrap">
                                     <div class="photo-img" *ngIf="user.noPhoto != photo.url" [ngStyle]="{ 'background-image': 'url(' + photo.url + ')'}"></div>
                                     <div class="photo-img" *ngIf="user.noPhoto == photo.url" [ngStyle]="{ 'background-image': 'url(images/' + photo.type + '_' + user.userGender + '.png)'}"></div>

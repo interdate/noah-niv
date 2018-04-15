@@ -6,7 +6,7 @@ import * as $ from "jquery";
 import {ChatPage} from "../chat/chat";
 import {ProfilePage} from "../profile/profile";
 import {RegisterPage} from "../register/register";
-import {HomePage} from "../home/home";
+//import {HomePage} from "../home/home";
 
 
 
