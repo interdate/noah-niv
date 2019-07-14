@@ -24,15 +24,20 @@
                             <p>{{ form?.text?.title3 }}</p></li>
                     </ul>
                 </div>
-
+                <h2 *ngIf="form?.text?.h2">{{ form?.text?.h2 }}</h2>
+                <h3 *ngIf="form?.text?.h3_1">{{ form?.text?.h3_1 }}</h3>
                 <div class="formdiv cf" *ngIf="user?.step < 3">
                     <div *ngIf="errors && errors?.length != 0" class="err">יש למלא את כל השדות</div>
                     <div *ngIf="form?.text?.h3 || form?.text?.html" class="txtcenter">
-                        <h3 *ngIf="form?.text?.h3">{{ form?.text?.h3 }}</h3>
+                        <!--<h3 *ngIf="form?.text?.h3">{{ form?.text?.h3 }}</h3>-->
                         <div *ngIf="form?.text?.html" id="html">{{ setHtml('html',form?.text?.html) }}</div>
                     </div>
                     <form>
                         <div *ngFor="let field of form?.fields">
+
+                            <div class="field" *ngIf="field.type == 'changePass'">
+                                <input class="mo button" type="submit" value="{{ field.label }}" (click)="changePassFn(field);" style="width: 100%;">
+                            </div>
 
                             <div class="field" *ngIf="field.type == 'submit'" style="text-align: center;">
                                 <input *ngIf="user?.step > 1 && user?.register" type="submit" (click)="stepBack();"
@@ -53,6 +58,7 @@
                                 </div>
                                 <div *ngIf="errors[field.name]" class="errText">{{errors[field.name] }}</div>
                             </div>
+                            <h3 *ngIf="form?.step?.val == 2 && field.name == 'maritalStatusId'">{{ form?.text?.h3_2 }}</h3>
 
                             <div class="field" *ngIf="field.type == 'select' && field.name != 'userCity' && field.name != 'countryOfOriginId'"
                                  [ngClass]="{'error': errors[field.name]}">
@@ -101,7 +107,7 @@
                             <div class="field" *ngIf="field.type == 'textarea'"
                                  [ngClass]="{'error': errors[field.name]}">
                                 <label>{{ field.label }}</label>
-                                <textarea placeholder="{{ field.label }}" class="txtbox big" cols="2" rows="2"
+                                <textarea class="txtbox big" cols="2" rows="2"
                                           name="{{ field.name }}" [(ngModel)]="user[field.name]"
                                           id="{{ field.name }}"></textarea>
                                 <div *ngIf="errors[field.name]" class="errText">{{errors[field.name] }}</div>
@@ -153,14 +159,14 @@
                         </div>
                     </form>
                 </div>
-
+                <div *ngIf="user?.photos && user?.noPhoto == user?.photos[0]?.url" class="texts" [innerHTML]="form?.texts?.description"></div>
                 <div class="formdiv cf" *ngIf="user?.step == 3">
                     <div class="photos">
                         <div *ngFor="let photo of user.photos; let i = index;">
                             <div *ngIf="i == 0"  class="main photo" (click)="edit(photo)">
                                 <div class="wrap" >
                                     <div *ngIf="user.noPhoto != photo.url" class="photo-img" [ngStyle]="{ 'background-image': 'url(' + photo.url + ')'}"></div>
-                                    <div *ngIf="user.noPhoto == photo.url" class="photo-img" [ngStyle]="{ 'background-image': 'url(images/1_' + user.userGender + '.png)'}"></div>
+                                    <div *ngIf="user.noPhoto == photo.url" class="photo-img" [ngStyle]="{ 'background-image': 'url(assets/images/1_' + user.userGender + '.png)'}"></div>
                                     <span class="num">{{ i + 1 }}</span>
                                     <div class="remove" *ngIf="user?.noPhoto != photo.url"><ion-icon name="create"></ion-icon></div>
                                     <span class="add" *ngIf="user.noPhoto == photo.url"><ion-icon name="md-add"></ion-icon></span>
@@ -170,7 +176,7 @@
                             <div *ngIf="i != 0 && user.noPhoto != user.photos[0]?.url" class="photo" (click)="edit(photo)">
                                 <div class="wrap">
                                     <div class="photo-img" *ngIf="user.noPhoto != photo.url" [ngStyle]="{ 'background-image': 'url(' + photo.url + ')'}"></div>
-                                    <div class="photo-img" *ngIf="user.noPhoto == photo.url" [ngStyle]="{ 'background-image': 'url(images/' + photo.type + '_' + user.userGender + '.png)'}"></div>
+                                    <div class="photo-img" *ngIf="user.noPhoto == photo.url" [ngStyle]="{ 'background-image': 'url(assets/images/' + photo.type + '_' + user.userGender + '.png)'}"></div>
                                     <span class="num">{{ i + 1 }}</span>
                                     <div class="remove" *ngIf="user.noPhoto != photo.url"><ion-icon name="create"></ion-icon></div>
                                     <span class="add" *ngIf="user.noPhoto == photo.url"><ion-icon name="md-add"></ion-icon></span>
@@ -178,26 +184,13 @@
                             </div>
 
                         </div>
-
-                        <!--<div *ngIf="user.photos?.length > 0 && user.noPhoto != user.photos[0].url" class="photo" (click)="add()">-->
-                            <!--<div class="wrap">-->
-                                <!--<div class="photo-img"-->
-                                     <!--[ngStyle]="{ 'background-image': 'url(' + user.noPhoto + ')'}"></div>-->
-                                <!--<span class="num">{{ user.photos?.length + 1 }}</span>-->
-                                <!--<span class="add"><ion-icon name="md-add"></ion-icon></span>-->
-                            <!--</div>-->
-                        <!--</div>-->
-
-                        <!--<div *ngIf="user.photos?.length == 1 && user.noPhoto == user.photos[0].url"  class="main photo" (click)="add()">-->
-                            <!--<div class="wrap" >-->
-                                <!--<div class="photo-img" [ngStyle]="{ 'background-image': 'url('+ user.noPhoto + ')'}"></div>-->
-                                <!--<span class="num">1</span>-->
-                                <!--<span class="add"><ion-icon name="md-add"></ion-icon></span>-->
-                            <!--</div>-->
-                        <!--</div>-->
                     </div>
                 </div>
-                <div *ngIf="user?.register && user?.step == 3" class="end-register" (click)="goToHome();">סיום הרשמה</div>
+                <div *ngIf="user?.photos && user?.noPhoto != user?.photos[0]?.url" class="texts" [innerHTML]="form?.texts?.description"></div>
+                <input *ngIf="user?.register && user?.step == 3" type="submit" (click)="stepBack();"
+                       value="{{ form?.texts?.back_button_text }}" class="submit-big rgt">
+                <div *ngIf="user?.register && user?.step == 3" class="end-register" (click)="goToHome();">{{ (user.noPhoto != user.photos[0]?.url) ? form?.texts?.end_button_text2 : form?.texts?.end_button_text }}</div>
+                <div *ngIf="!user?.register && user?.step == 3" class="end-register" (click)="goToHome();">{{ form?.texts?.end_button_edit }}</div>
             </div>
         </div>
     </div>

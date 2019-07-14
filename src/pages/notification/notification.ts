@@ -1,7 +1,6 @@
 import {Component} from '@angular/core';
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import {ApiQuery} from "../../library/api-query";
-import {Http} from "@angular/http";
 import * as $ from "jquery";
 import {ChatPage} from "../chat/chat";
 import {ArenaPage} from "../arena/arena";
@@ -26,20 +25,30 @@ export class NotificationPage {
         title: 'התראות מהתיבה',
         no_results: 'לא נמצאו תוצאות'
     };
+    tabs: any = 'like';
+    notification: any;
 
     constructor(
         public navCtrl: NavController,
         public navParams: NavParams,
-        public api: ApiQuery,
-        public http: Http
+        public api: ApiQuery
     ) {
         this.pageData = this.defaultData;
         this.api.showLoad();
-        this.http.get(this.api.url + '/user/likes/notifications',this.api.setHeaders(true)).subscribe(
-            data => {
-                console.log('notifications: ', data.json().likesNotifications);
-                this.notifications = data.json().likesNotifications;
-                this.pageData = (typeof data.json().pageData == 'undefined') ? this.defaultData : data.json().pageData;
+        this.api.http.get(this.api.url + '/user/likes/notifications',this.api.setHeaders(true)).subscribe(
+            (data: any) => {
+                console.log('notifications: ', data.likesNotifications);
+                this.notifications = data.likesNotifications;
+                let notify = {like:[],bingo:[]};
+                this.notifications.items.forEach(function (notification) {
+                    if( notification.bingo == '0' ){
+                        notify.like.push(notification);
+                    }else{
+                        notify.bingo.push(notification);
+                    }
+                });
+                this.notification = notify;
+                this.pageData = (typeof data.pageData == 'undefined') ? this.defaultData : data.pageData;
                 this.api.hideLoad();
             }, err => {
                 console.log('notifications: ', err);
@@ -68,8 +77,8 @@ export class NotificationPage {
 
     readNotif(id){
         $('.notificat_' + id).parents('li').removeClass('active');
-        this.http.post(this.api.url + '/user/notification/' + id + '/read',{},this.api.setHeaders(true)).subscribe(
-            data => {
+        this.api.http.post(this.api.url + '/user/notification/' + id + '/read',{},this.api.setHeaders(true)).subscribe(
+            (data: any) => {
                 this.api.hideLoad();
             }, err => {
                 console.log('notifications: ', err);

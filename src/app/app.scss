@@ -17,6 +17,10 @@
 
 $mobile_url: 'http://m.noah.kosherdate.co.il/';
 
+*{
+  font-family: "Arial Hebrew", sans-serif;
+}
+
 .mo-innheader.header-ios.old-v, .content.content-ios.old-v{
   margin-top: 15px;
 }
@@ -29,7 +33,7 @@ $mobile_url: 'http://m.noah.kosherdate.co.il/';
 
 .ion-page{
   background-color: #282f39;
-  background-image: url(../images/signinbg.jpg);
+  background-image: url(../assets/images/signinbg.jpg);
   background-repeat: no-repeat;
   background-position: center 80px;
   background-size: cover;
@@ -51,9 +55,9 @@ $mobile_url: 'http://m.noah.kosherdate.co.il/';
   position: relative;
   z-index: 999;
   display: inline-block;
-  width: 49.4%;
+  width: calc(50% - 5px);
   height: 55px;
-  background-image: url('../images/notif_button.png');
+  background-image: url('../assets/images/notif_button.png');
   background-repeat: no-repeat;
   //background-size: contain;
   background-position: center;
@@ -70,7 +74,7 @@ $mobile_url: 'http://m.noah.kosherdate.co.il/';
   width: 49.4%;
   height: 55px;
   z-index: 999;
-  background-image: url('../images/dating_button.png');
+  background-image: url('../assets/images/dating_button.png');
   background-repeat: no-repeat;
   //background-size: contain;
   background-position: center;
@@ -122,6 +126,7 @@ $mobile_url: 'http://m.noah.kosherdate.co.il/';
   left: auto;
   right: 15px;
   line-height: 30px;
+  letter-spacing: 0.2px;
 }
 
 .submit-big{
@@ -132,6 +137,10 @@ $mobile_url: 'http://m.noah.kosherdate.co.il/';
   padding: 0px 15px 5px 20px;
   float: none;
   display: inline-block;
+}
+
+.ios .submit-big{
+  padding-bottom: 0px;
 }
 
 .maincontent{
@@ -248,7 +257,7 @@ h1{margin: 0px;}
   right: 10px;
   width: 50px;
   height: 50px;
-  background: url(../images/bingo/close.png) no-repeat center;
+  background: url(../assets/images/bingo/close.png) no-repeat center;
   background-size: 60% 60%;
 }
 
@@ -287,7 +296,7 @@ h1{margin: 0px;}
   width: 11.5%;
   height: 115px;
   text-align: center;
-  background: url(../images/bingo/plus.png) no-repeat center;
+  background: url(../assets/images/bingo/plus.png) no-repeat center;
   background-size: contain;
   margin-right: -1.5%;
 }
@@ -300,11 +309,11 @@ h1{margin: 0px;}
 }
 
 #splashBingo .chat {
-  background-image: url(../images/bingo/chatSplash.png);
+  background-image: url(../assets/images/bingo/chatSplash.png);
 }
 
 #splashBingo .ignore {
-  background-image: url(../images/bingo/ignoreSplash.png);
+  background-image: url(../assets/images/bingo/ignoreSplash.png);
 }
 
 #splashBingo .ignore, #splashBingo .chat {
@@ -325,4 +334,8 @@ h1{margin: 0px;}
 
 #splashBingo .chat span{
   padding-left: 55px;
+}
+
+ion-alert .alert-input{
+  direction: rtl !important;
 }

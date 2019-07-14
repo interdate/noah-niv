@@ -1,12 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
-import {ActionSheetController, Content, NavController, NavParams, Platform} from 'ionic-angular';
+import {ActionSheetController, AlertController, Content, NavController, NavParams, Platform} from 'ionic-angular';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 //import { File } from '@ionic-native/file';
 import { ImagePicker } from '@ionic-native/image-picker';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import {ApiQuery} from "../../library/api-query";
 import * as $ from "jquery";
-import {Http} from "@angular/http";
 import {HomePage} from "../home/home";
 import {Page} from "../page/page";
 declare var setChoosen;
@@ -22,7 +21,7 @@ declare var setSelect2;
 export class RegisterPage {
     @ViewChild(Content) content: Content;
     login: any = false;
-    user: any = {};
+    user: any = {photos: []};
     form: any = {fields: []};
     errors: any;
     activePhoto: any;
@@ -31,12 +30,11 @@ export class RegisterPage {
         public navCtrl: NavController,
         public navParams: NavParams,
         public api: ApiQuery,
-        public http: Http,
         public platform: Platform,
         private camera: Camera,
         public imagePicker: ImagePicker,
         private transfer: FileTransfer,
-        //private file: File,
+        public alertCtrl: AlertController,
         public actionSheetCtrl: ActionSheetController
     ) {
         api.storage.get('status').then((val) => {
@@ -52,12 +50,87 @@ export class RegisterPage {
         //jQuery = setChoosen(jQuery);
     }
 
+    changePassFn(field){
+        let alert = this.alertCtrl.create({
+            title: field.label,
+            inputs: field.form,
+            buttons: [
+                {
+                    text: 'ביטול',
+                    role: 'cancel',
+                    handler: data => {
+                        console.log('Cancel clicked');
+                    }
+                },
+                {
+                    text: 'עדכון',
+                    handler: data => {
+                        let valid = this.passValid(data, field.errors);
+                        if (valid === true) {
+                            this.savePass(data);
+                            // logged in!
+                        } else {
+                            let mess = this.alertCtrl.create({
+                                title: String(valid),
+                                buttons: ['אישור']
+                            });
+                            mess.present();
+                            // invalid login
+                            return false;
+                        }
+                    }
+                }
+            ]
+        });
+        alert.present();
+    }
+
+    savePass(data){
+        this.api.showLoad();
+        this.api.http.post(this.api.url + '/user/change-password', data, this.api.setHeaders(true)).subscribe((res: any) => {
+            this.api.hideLoad();
+            if(res.success) {
+                this.api.storage.set('password', data.userPass);
+                this.api.setHeaders(true, false, data.userPass);
+            }
+            if(typeof res.alertMess != 'undefined') {
+                let alert = this.alertCtrl.create({
+                    title: res.alertMess.title,
+                    subTitle: res.alertMess.message,
+                    buttons: [res.alertMess.button]
+                });
+                alert.present();
+            }
+        });
+    }
+
+    passValid(data, err){
+        console.log(data);
+        let res = true;
+        if(data.oldPass === '' || data.userPass === '' || data.userPass2 === ''){
+            res = err.err2;
+        }else if(res === true && this.user.userPass !== data.oldPass){
+            res = err.err1;
+        }else if(res === true && data.userPass.length < 6 || data.userPass2.length < 6){
+            res = err.err3;
+        }else if(res === true && data.userPass !== data.userPass2){
+            res = err.err4;
+        }else if(res === true && data.oldPass === data.userPass){
+            res = err.err5;
+        }
+        // if(this.user.userPass === data.oldPass && data.userPass === data.userPass2){
+        //     res = true;
+        // }
+        return res;
+        //this.api.storage.set('password', this.password);
+    }
+
     sendForm(){
         this.api.showLoad();
         var header = this.api.setHeaders((this.login == 'login') ? true : false);
         //console.log(header);
         //alert(this.login);
-        if(typeof this.user != 'undefined' && this.user.step != 3) {
+        if(typeof this.user != 'undefined' && this.user.step != 3 && typeof this.form.fields != 'undefined') {
             //this.user.userCity = $('#userCity').val();
             //this.user.countryOfOriginId = $('#countryOfOriginId').val();
             this.form.fields.forEach(field => {
@@ -66,14 +139,14 @@ export class RegisterPage {
                 }
             });
         }
-        this.http.post(this.api.url + '/user/register', this.user, header).subscribe(
-            data => {
+        this.api.http.post(this.api.url + '/user/register', this.user, header).subscribe(
+            (data: any) => {
                 //alert(JSON.stringify(data));
-                console.log('register: ', data.json());
-                console.log('register: ',JSON.stringify(data.json()));
-                this.form = data.json().form;
-                this.user = data.json().user;
-                this.errors = data.json().errors;
+                console.log('register: ', data);
+                console.log('register: ',JSON.stringify(data));
+                this.form = data.form;
+                this.user = data.user;
+                this.errors = data.errors;
 
                 if(this.user.step == 3 ){
                     this.api.setHeaders(true,this.user.userEmail,this.user.userPass);
@@ -95,8 +168,6 @@ export class RegisterPage {
                     this.api.setHeaders(true,this.user.userEmail);
                 }
                 if(this.user.step != 3){
-                    //this.choosen('#userCity,#countryOfOriginId');
-
                     this.form.fields.forEach(field => {
                         if(field.type == 'select' /*&& field.name != 'userCity' && field.name != 'countryOfOriginId'*/){
                             this.select2(field);
@@ -105,11 +176,11 @@ export class RegisterPage {
                 }
                 this.content.scrollToTop(300);
             }, err => {
+                this.api.hideLoad();
                 console.log('registerError: ', err);
                 console.log('registerError: ',JSON.stringify(err));
                 //this.api.storage.remove('status');
                 this.errors = err._body;
-                this.api.hideLoad();
             }
         );
     }
@@ -135,6 +206,9 @@ export class RegisterPage {
     }
 
     stepBack(){
+        if(this.user.step == 3){
+            this.user.register = false;
+        }
         this.user.step = this.user.step - 2;
         this.sendForm();
     }

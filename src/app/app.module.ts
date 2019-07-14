@@ -9,8 +9,7 @@ import { HomePage } from '../pages/home/home';
 import { LoginPage } from '../pages/login/login';
 import {ApiQuery} from '../library/api-query';
 
-import {IonicStorageModule} from '@ionic/storage';
-import { HttpModule } from '@angular/http'
+import { IonicStorageModule } from '@ionic/storage';
 import { RecoveryPageModule } from "../pages/recovery/recovery.module";
 import {ContactPageModule} from "../pages/contact/contact.module";
 import {RegisterPageModule} from "../pages/register/register.module";
@@ -30,6 +29,8 @@ import {NotificationPageModule} from "../pages/notification/notification.module"
 import {InvitationsPageModule} from "../pages/invitations/invitations.module";
 import {DatingPageModule} from "../pages/dating/dating.module";
 import { Facebook } from '@ionic-native/facebook';
+import { HttpClientModule } from '@angular/common/http';
+import {Push} from "@ionic-native/push";
 
 
 @NgModule({
@@ -41,6 +42,7 @@ import { Facebook } from '@ionic-native/facebook';
     ],
     imports: [
         BrowserModule,
+        HttpClientModule,
         IonicModule.forRoot(MyApp),
         IonicStorageModule.forRoot(),
         RecoveryPageModule,
@@ -56,8 +58,7 @@ import { Facebook } from '@ionic-native/facebook';
         NotificationPageModule,
         InvitationsPageModule,
         DatingPageModule,
-        PageModule,
-        HttpModule
+        PageModule
     ],
     bootstrap: [IonicApp],
     entryComponents: [
@@ -74,7 +75,8 @@ import { Facebook } from '@ionic-native/facebook';
         Camera,
         FileTransfer,
         ImagePicker,
-        File
+        File,
+        Push
     ]
 })
 export class AppModule {}

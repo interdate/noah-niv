@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "597609551385",
+    "firebase_url": "https://noah-e9c5e.firebaseio.com",
+    "project_id": "noah-e9c5e",
+    "storage_bucket": "noah-e9c5e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:597609551385:android:d29b562ada6ff009",
+        "android_client_info": {
+          "package_name": "il.co.dos2date"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "597609551385-a95j6jdrf277smj45dqcr3h05p8vvf5q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCymW5cEBR7WB7_tVDuapMny9-bkr7kn4w"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

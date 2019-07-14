@@ -19,9 +19,9 @@
                     <li *ngFor="let user of users" [ngClass]="{'active': user.isOnline == '1'}">
                         <div class="inn cf">
                             <a (click)="profile(user)" class="thumb">
-                                <img *ngIf="user.main != 'http://noah.kosherdate.co.il/images/users/large/0.jpg' && user.main != 'http://noah.kosherdate.co.il/images/users/large/1.jpg'" src="{{ user.main }}" alt="user">
-                                <img *ngIf="user.main == 'http://noah.kosherdate.co.il/images/users/large/0.jpg'" src="images/1_0.png" alt="user">
-                                <img *ngIf="user.main == 'http://noah.kosherdate.co.il/images/users/large/1.jpg'" src="images/1_1.png" alt="user">
+                                <img *ngIf="user.main != 'https://www.dos2date.co.il/images/users/large/0.jpg' && user.main != 'http://noah.kosherdate.co.il/images/users/large/1.jpg'" src="{{ user.main }}" alt="user">
+                                <img *ngIf="user.main == 'https://www.dos2date.co.il/images/users/large/0.jpg'" src="images/1_0.png" alt="user">
+                                <img *ngIf="user.main == 'https://www.dos2date.co.il/images/users/large/1.jpg'" src="images/1_1.png" alt="user">
                             </a>
                             <div class="cont">
                                 <h4 (click)="profile(user)"><a [ngClass]="{'mo-online-aft': user.isOnline == '1'}"

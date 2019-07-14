@@ -1,13 +1,38 @@
 page-login {
   .fb-login{
     width: 200px;
-    margin: 10px auto 0;
-    height: 40px;
-    background: url(../images/login-fb.png) no-repeat center;
+    margin: 10px auto;
+    height: 35px;
+    background: url(../assets/images/login-fb.png) no-repeat center;
     background-size: auto 100%;
     font-size: 0px;
   }
   .text-login-fb{
     text-align: center;
+  }
+
+  .login .field{
+    width: calc(100% - 25px);
+    margin: 0 auto 20px;
+  }
+
+  .login input.mo.big.button{
+    border-radius: 5px;
+    height: 40px;
+    padding-top: 3px;
+    letter-spacing: 1px;
+    font-size: 22px;
+  }
+  .login .txtcenter a{
+    text-decoration: underline;
+    color: #050914;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+  }
+
+  .login .field .txtbox{
+    font-size: 20px;
+    font-weight: 100;
+    letter-spacing: 1px;
   }
 }

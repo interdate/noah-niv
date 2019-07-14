@@ -1,3 +1,52 @@
 page-notification {
-
+  h1{padding-bottom: 0px !important;}
+  .tabs{
+    text-align: center;
+    padding: 5px 0 10px;
+  }
+  .segment .segment-button{
+    display: inline-block;
+    padding: 4px 9px;
+    border: 1px #149dbb solid;
+    height: auto;
+    line-height: 1;
+    color: #000;
+    font-size: 16px;
+  }
+  .segment .segment-button.segment-activated{
+    background: #149dbb;
+    color:#fff;
+  }
+  .segment .segment-button:not(:first-of-type) {
+    border-left-width: 1px;
+  }
+  .segment .segment-button:last-of-type,.segment .segment-button:first-of-type{
+    border-radius: 0px;
+  }
+  .status{
+    margin: 0px !important;
+    text-align: left;
+    color: red;
+    width: auto;
+    line-height: 1.2;
+    height: auto;
+  }
+  h4{
+    margin: 0px 0px 5px;
+  }
+  h1 .inv-status{
+    display: block;
+    font-size: 14px;
+    color: red;
+  }
+  .user-data{
+    text-align: center;
+    font-size: 18px;
+  }
+  .user-data p{
+    margin-bottom: 20px;
+  }
+  .date{
+    direction: ltr;
+  }
 }

@@ -1,7 +1,6 @@
 import {Component} from '@angular/core';
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import {ApiQuery} from "../../library/api-query";
-import {Http} from "@angular/http";
 import * as $ from "jquery";
 import {ChatPage} from "../chat/chat";
 
@@ -36,8 +35,7 @@ export class InboxPage {
     constructor(
         public navCtrl: NavController,
         public navParams: NavParams,
-        public api: ApiQuery,
-        public http: Http
+        public api: ApiQuery
     ) {
         this.api.showLoad();
         this.pageData = this.defaultData;
@@ -51,17 +49,17 @@ export class InboxPage {
     }
 
     getUsers(){
-        this.http.get(this.api.url + '/user/contacts/perPage:20/page:' + this.page, this.api.setHeaders(true)).subscribe(
-            data => {
-                console.log('searchResults: ', data.json());
-                if(typeof data.json().users != 'undefined' && data.json().users.length > 0) {
-                    data.json().users.forEach(user => {
+        this.api.http.get(this.api.url + '/user/contacts/perPage:20/page:' + this.page, this.api.setHeaders(true)).subscribe(
+            (data: any) => {
+                console.log('searchResults: ', data);
+                if(typeof data.users != 'undefined' && data.users.length > 0) {
+                    data.users.forEach(user => {
                         this.users.push(user);
                     });
                 }
                 this.init = false;
-                if(data.json().pageData) {
-                    this.pageData = data.json().pageData;
+                if(data.pageData) {
+                    this.pageData = data.pageData;
                 }else{
                     this.pageData = this.defaultData;
                 }

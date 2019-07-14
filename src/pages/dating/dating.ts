@@ -2,7 +2,6 @@ import {Component, ViewChild} from '@angular/core';
 import {Content, IonicPage, NavController, NavParams} from 'ionic-angular';
 import * as $ from "jquery";
 import {ApiQuery} from "../../library/api-query";
-import {Http} from "@angular/http";
 import {HomePage} from "../home/home";
 //import set = Reflect.set;
 
@@ -26,18 +25,17 @@ export class DatingPage {
     constructor(
         public navCtrl: NavController,
         public navParams: NavParams,
-        public api: ApiQuery,
-        public http: Http
+        public api: ApiQuery
     ) {
         this.api.showLoad();
-        this.http.post(this.api.url + '/user/invite/' + this.navParams.get('userId'),{},this.api.setHeaders(true)).subscribe(
-            data => {
+        this.api.http.post(this.api.url + '/user/invite/' + this.navParams.get('userId'),{},this.api.setHeaders(true)).subscribe(
+            (data: any) => {
                 //alert(JSON.stringify(data));
-                console.log('register: ', data.json());
-                this.form = data.json().form;
-                this.invite = data.json().invite;
-                if (data.json().errors) {
-                    this.errors = data.json().errors;
+                console.log('register: ', data);
+                this.form = data.form;
+                this.invite = data.invite;
+                if (data.errors) {
+                    this.errors = data.errors;
                 }
                 this.pageData = this.form.pageData;
                 this.content.scrollToTop(300);
@@ -117,14 +115,14 @@ export class DatingPage {
     sendInvite(){
         this.api.showLoad();
         this.errors = {};
-        this.http.post(this.api.url + '/user/invite/' + this.navParams.get('userId'),this.invite,this.api.setHeaders(true)).subscribe(
-            data => {
-                console.log('invite: ', data.json());
+        this.api.http.post(this.api.url + '/user/invite/' + this.navParams.get('userId'),this.invite,this.api.setHeaders(true)).subscribe(
+            (data: any) => {
+                console.log('invite: ', data);
                 this.api.hideLoad();
-                this.form = data.json().form;
-                this.invite = data.json().invite;
-                if (data.json().errors) {
-                    this.errors = data.json().errors;
+                this.form = data.form;
+                this.invite = data.invite;
+                if (data.errors) {
+                    this.errors = data.errors;
                     this.content.scrollToTop(300);
                 }
                 this.pageData = this.form.pageData;

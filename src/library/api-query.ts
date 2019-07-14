@@ -1,8 +1,7 @@
 import {Component} from '@angular/core';
-import {Headers, RequestOptions} from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {Platform, AlertController, LoadingController, ToastController} from 'ionic-angular';
 import {Storage} from '@ionic/storage';
-import {Http} from '@angular/http';
 import {DomSanitizer} from '@angular/platform-browser';
 //import * as $ from "jquery";
 
@@ -12,7 +11,7 @@ import {DomSanitizer} from '@angular/platform-browser';
 export class ApiQuery {
 
     url: any;
-    header: RequestOptions;
+    header: any;
     public response: any;
     public showFooter: any = true;
     public pageName: any = 'page';
@@ -29,11 +28,11 @@ export class ApiQuery {
                 public loadingCtrl: LoadingController,
                 public platform: Platform,
                 public toastCtrl: ToastController,
-                public http: Http,
+                public http: HttpClient,
                 private sanitizer: DomSanitizer) {
 
         //this.url = 'http://localhost:8101';
-        this.url = 'http://m.dos2date.co.il/api/v1';
+        this.url = 'https://m.dos2date.co.il/api/v1';
         this.storage.get('user_id').then((val) => {
             this.storage.get('username').then((username) => {
                 this.username = username;
@@ -46,21 +45,23 @@ export class ApiQuery {
     }
 
     presentToast(txt, duration = 3000) {
-        let toast = this.toastCtrl.create({
-            message: txt,
-            duration: duration,
-        });
-
-        toast.present();
+        if (this.isLoaderUndefined()){
+            let toast = this.toastCtrl.create({
+                message: txt,
+                duration: duration,
+            });
+            toast.present();
+        }
     }
 
     showLoad(txt = 'אנא המתן...') {
+        if (this.isLoaderUndefined()) {
+            this.loading = this.loadingCtrl.create({
+                content: txt
+            });
 
-        this.loading = this.loadingCtrl.create({
-            content: txt
-        });
-
-        this.loading.present();
+            this.loading.present();
+        }
     }
 
     hideLoad() {
@@ -92,7 +93,7 @@ export class ApiQuery {
         var platformName = this.platform.is('ios') ? 'IOS' : 'Android';
         this.http.post(this.url + '/user/deviceId/OS:' + platformName, data, this.setHeaders(true)).subscribe(data => {
             //alert(JSON.stringify(data));
-            console.log('sendPhoneId: ', data.json());
+            console.log('sendPhoneId: ', data);
         }, err => {
             //this.storage.remove('status');
             //alert(JSON.stringify(err));
@@ -126,30 +127,31 @@ export class ApiQuery {
 
     setHeaders(is_auth = false, username = false, password = false, register = "0") {
 
-        if (username != false) {
+        if (username !== false) {
             this.username = username;
         }
 
-        if (password != false) {
+        if (password !== false) {
             this.password = password;
         }
 
-        let myHeaders: Headers = new Headers;
+        //let myHeaders: Headers = new Headers;
+        let myHeaders = new HttpHeaders();
 
-        myHeaders.append('Accept', '*/*');
-        myHeaders.append('Access-Control-Allow-Origin', '*');
-        myHeaders.append("appVersion", this.version);
-        myHeaders.append('Content-type', 'application/json');
+        myHeaders = myHeaders.append('Accept', '*/*');
+        myHeaders = myHeaders.append('Access-Control-Allow-Origin', '*');
+        myHeaders = myHeaders.append("appVersion", this.version);
+        myHeaders = myHeaders.append('Content-type', 'application/json');
 
         if (is_auth == true) {
-            myHeaders.append("Authorization", "Basic " + btoa(this.username + ':' + this.password));
+            myHeaders = myHeaders.append("Authorization", "Basic " + btoa(encodeURIComponent(this.username) + ':' + encodeURIComponent(this.password)));
         }
-        myHeaders.append("register", register);
+        myHeaders = myHeaders.append("register", register);
 
 
-        this.header = new RequestOptions({
+        this.header = {
             headers: myHeaders
-        });
+        };
         return this.header;
     }
 

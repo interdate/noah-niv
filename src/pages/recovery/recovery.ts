@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import * as $ from "jquery";
 import {ApiQuery} from '../../library/api-query';
-import {Http} from "@angular/http";
 
 
 
@@ -18,8 +17,7 @@ export class RecoveryPage {
     constructor(
         public navCtrl: NavController,
         public navParams: NavParams,
-        public api: ApiQuery,
-        public http: Http
+        public api: ApiQuery
     ) {
 
     }
@@ -43,14 +41,14 @@ export class RecoveryPage {
         this.text = '';
         this.api.showLoad();
 
-        this.http.get(this.api.url + '/recovery/' + this.email, {}).subscribe(
-            data => {
+        this.api.http.get(this.api.url + '/recovery/' + this.email, {}).subscribe(
+            (data: any) => {
                 //alert(JSON.stringify(data));
-                console.log('recovery: ', data.json());
-                if(data.json().err == true){
-                    this.errors = data.json().text;
+                console.log('recovery: ', data);
+                if(data.err == true){
+                    this.errors = data.text;
                 }else{
-                    this.text = data.json().text;
+                    this.text = data.text;
                 }
                 this.api.hideLoad();
             }, err => {

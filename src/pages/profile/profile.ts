@@ -1,7 +1,6 @@
 import {Component, ViewChild} from '@angular/core';
 import {AlertController, IonicPage, NavController, NavParams, Content} from 'ionic-angular';
 import {ApiQuery} from "../../library/api-query";
-import {Http} from "@angular/http";
 import * as $ from "jquery";
 import {HeilbaumPhotoswipeController, PhotoswipeOptions, HeilbaumPhotoswipe} from "heilbaum-ionic-photoswipe";
 import {ResultsPage} from "../results/results";
@@ -40,7 +39,6 @@ export class ProfilePage {
         public navCtrl: NavController,
         public navParams: NavParams,
         public api: ApiQuery,
-        public http: Http,
         protected pswpCtrl: HeilbaumPhotoswipeController,
         private alertCtrl: AlertController
     ) {
@@ -59,8 +57,8 @@ export class ProfilePage {
 
         this.previewItems = this.user.mainImage;
         if(typeof this.previewItems != 'undefined') {
-            if (this.previewItems[0].src == 'http://noah.kosherdate.co.il/images/users/large/0.jpg' || this.previewItems[0].src == 'http://noah.kosherdate.co.il/images/users/large/1.jpg') {
-                this.previewItems[0].src = (this.previewItems[0].src == 'http://noah.kosherdate.co.il/images/users/large/0.jpg') ? 'images/1_0.png' : 'images/1_1.png';
+            if (this.previewItems[0].src == 'https://www.dos2date.co.il/images/users/large/0.jpg' || this.previewItems[0].src == 'https://www.dos2date.co.il/images/users/large/1.jpg') {
+                this.previewItems[0].src = (this.previewItems[0].src == 'https://www.dos2date.co.il/images/users/large/0.jpg') ? 'images/1_0.png' : 'images/1_1.png';
                 this.previewItems[0].h = this.previewItems[0].w = 260;
             }
         }
@@ -81,12 +79,12 @@ export class ProfilePage {
             this.user.is_in_black_list = $('.' + list).hasClass('add');
         }
 
-        this.http.post(this.api.url + '/user/managelists/' + list + '/' + action + '/' + this.user.id, {}, this.api.setHeaders(true)).subscribe(
-            data => {
+        this.api.http.post(this.api.url + '/user/managelists/' + list + '/' + action + '/' + this.user.id, {}, this.api.setHeaders(true)).subscribe(
+            (data: any) => {
                 let alert = this.alertCtrl.create({
-                    title: data.json().success,
+                    title: data.success,
                     //subTitle: '10% of battery remaining',
-                    buttons: ['אשור']
+                    buttons: ['אישור']
                 });
                 alert.present();
 
@@ -110,13 +108,13 @@ export class ProfilePage {
             let mess = (this.rep_ab.value.length > 3) ? 'תודה. ההודעה נשלחה.' : 'מינימום 4 אותיות';
             let alert = this.alertCtrl.create({
                 title: mess,
-                buttons: ['אשור']
+                buttons: ['אישור']
             });
             alert.present();
             if(this.rep_ab.value.length > 3) {
                 this.rep_ab.show = false;
-                this.http.post(this.api.url + '/user/abuse/' + this.user.id, {abuseMessage: this.rep_ab.value}, this.api.setHeaders(true)).subscribe(
-                    data => {
+                this.api.http.post(this.api.url + '/user/abuse/' + this.user.id, {abuseMessage: this.rep_ab.value}, this.api.setHeaders(true)).subscribe(
+                    (data: any) => {
                         this.rep_ab.value = '';
                         this.api.hideLoad();
                     }, err => {
@@ -131,17 +129,17 @@ export class ProfilePage {
     }
 
     getProfileData(){
-        this.http.get(this.api.url + '/user/profile/' + this.user.id, this.api.setHeaders(true)).subscribe(
-            data => {
-                //console.log('searchResults: ', data.json());
-                this.user = data.json().user;
-                this.previewItems = data.json().images;
-                if(this.previewItems[0].src == 'http://noah.kosherdate.co.il/images/users/large/0.jpg' || this.previewItems[0].src == 'http://noah.kosherdate.co.il/images/users/large/1.jpg'){
-                    this.previewItems[0].src = (this.previewItems[0].src == 'http://noah.kosherdate.co.il/images/users/large/0.jpg') ? 'images/1_0.png' : 'images/1_1.png';
+        this.api.http.get(this.api.url + '/user/profile/' + this.user.id, this.api.setHeaders(true)).subscribe(
+            (data: any) => {
+                //console.log('searchResults: ', data);
+                this.user = data.user;
+                this.previewItems = data.images;
+                if(this.previewItems[0].src == 'https://www.dos2date.co.il/images/users/large/0.jpg' || this.previewItems[0].src == 'https://www.dos2date.co.il/images/users/large/1.jpg'){
+                    this.previewItems[0].src = (this.previewItems[0].src == 'https://www.dos2date.co.il/images/users/large/0.jpg') ? 'images/1_0.png' : 'images/1_1.png';
                     this.previewItems[0].h = this.previewItems[0].w = 260;
                 }
-                if(data.json().pageData) {
-                    this.pageData = data.json().pageData;
+                if(data.pageData) {
+                    this.pageData = data.pageData;
                 }
                 this.api.hideLoad();
 
@@ -184,6 +182,7 @@ export class ProfilePage {
             shareEl: false,
             counterEl: false,
             arrowEl: false,
+            closeEl: true,
         };
 
         const pswp: HeilbaumPhotoswipe = this.pswpCtrl.create(this.previewItems, options);

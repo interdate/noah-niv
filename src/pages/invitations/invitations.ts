@@ -1,7 +1,6 @@
 import {Component} from '@angular/core';
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import {ApiQuery} from "../../library/api-query";
-import {Http} from "@angular/http";
 import * as $ from "jquery";
 import {DatingPage} from "../dating/dating";
 import {HomePage} from "../home/home";
@@ -36,8 +35,7 @@ export class InvitationsPage {
     constructor(
         public navCtrl: NavController,
         public navParams: NavParams,
-        public api: ApiQuery,
-        public http: Http
+        public api: ApiQuery
     ) {
         this.pageData = this.defaultData;
         if (this.navParams.get('invitation')) {
@@ -52,17 +50,17 @@ export class InvitationsPage {
 
     updateData(){
         this.api.showLoad();
-        this.http.get(this.api.url + '/user/invitations', this.api.setHeaders(true)).subscribe(
-            data => {
-                this.userId = data.json().userId;
-                this.invitations = data.json().invitations;
+        this.api.http.get(this.api.url + '/user/invitations', this.api.setHeaders(true)).subscribe(
+            (data: any) => {
+                this.userId = data.userId;
+                this.invitations = data.invitations;
                 //alert(JSON.stringify(this.invite));
 
                 this.setDateFormat();
                 let inviteAr = {i_invite:[],invite_me:[]};
                 this.invitations.forEach(function (invite1) {
                     //
-                    if( data.json().userId == invite1.userId ){
+                    if( data.userId == invite1.userId ){
 
                         inviteAr.i_invite.push(invite1);
                     }else{
@@ -70,7 +68,7 @@ export class InvitationsPage {
                     }
                 });
                 this.invite = inviteAr;
-                this.pageData = (typeof data.json().pageData == 'undefined') ? this.defaultData : data.json().pageData;
+                this.pageData = (typeof data.pageData == 'undefined') ? this.defaultData : data.pageData;
                 this.api.hideLoad();
             }, err => {
                 console.log('notifications: ', err);
@@ -83,8 +81,8 @@ export class InvitationsPage {
         //save
         this.invitation.approved = 1;
         this.api.showLoad();
-        this.http.post(this.api.url + '/user/invitations', {invitation: this.invitation, action: val}, this.api.setHeaders(true)).subscribe(
-            data => {
+        this.api.http.post(this.api.url + '/user/invitations', {invitation: this.invitation, action: val}, this.api.setHeaders(true)).subscribe(
+            (data: any) => {
                 this.api.hideLoad();
                 if(val == 2){
                     this.navCtrl.push(DatingPage,{userId: this.invitation.userId});
@@ -93,7 +91,7 @@ export class InvitationsPage {
                         message: {
                             photo: (this.invitation.userId == this.userId) ? this.invitation.userToMain : this.invitation.userMain,
                             name: (this.invitation.userId == this.userId) ? this.invitation.userToUserfName : this.invitation.userUserfName,
-                            text: data.json().text
+                            text: data.text
                         }
                     });
                     delete this.invitation;
@@ -142,8 +140,8 @@ export class InvitationsPage {
         $('.date_' + invite.dateInviteId).parents('li').removeClass('active');
         //read
         if(invite.isRead != 1 && needRead != 0){
-            this.http.post(this.api.url + '/user/invitations', {invitation:invite, field:'isRead', val:1}, this.api.setHeaders(true)).subscribe(
-                data => {
+            this.api.http.post(this.api.url + '/user/invitations', {invitation:invite, field:'isRead', val:1}, this.api.setHeaders(true)).subscribe(
+                (data: any) => {
                     this.api.hideLoad();
                 }, err => {
                     console.log('notifications: ', err);

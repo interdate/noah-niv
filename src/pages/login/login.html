@@ -7,7 +7,7 @@
     <div class="mo-inn" style="text-align: center;">
       <h1 class="mo-pghead"></h1>
 
-      <form class="frm">
+      <form class="frm login">
         <div *ngIf="errors" color="danger" class="err">{{ errors }}</div>
         <div *ngIf="fbId != 0" class="text-login-fb">
           <h2>כניסה עם משתמש קיים</h2>
@@ -23,8 +23,8 @@
         <div class="field txtcenter">
           <input (click)="login();" type="submit" value="כניסה" class="mo button big" />
         </div>
-        <div class="txtcenter"><a (click)="goToRecovery();" >שכחתי את הסיסמא</a></div>
         <button class="fb-login" (click)="loginFB();" *ngIf="fbId == 0">FB</button>
+        <div class="txtcenter"><a (click)="goToRecovery();" >שכחתי את הסיסמא</a></div>
       </form>
     </div>
   </div>

@@ -1,7 +1,6 @@
 import {Component, ViewChild} from '@angular/core';
-import {IonicPage, NavController, NavParams, Slides} from 'ionic-angular';
+import {AlertController, IonicPage, NavController, NavParams, Slides} from 'ionic-angular';
 import {ApiQuery} from "../../library/api-query";
-import {Http} from "@angular/http";
 import * as $ from "jquery";
 import {ChatPage} from "../chat/chat";
 import {ProfilePage} from "../profile/profile";
@@ -31,17 +30,17 @@ export class ArenaPage {
         public navCtrl: NavController,
         public navParams: NavParams,
         public api: ApiQuery,
-        public http: Http
+        public alertCtrl: AlertController
     ) {
         this.api.showLoad();
         if(this.navParams.get('params')){
             this.params = this.navParams.get('params');
         }
-        this.http.get(this.api.url + '/users/forLikes/' + this.params.userId + '/' + this.params.notificationId, this.api.setHeaders(true)).subscribe(
-            data => {
-                this.users = data.json().users;
+        this.api.http.get(this.api.url + '/users/forLikes/' + this.params.userId + '/' + this.params.notificationId, this.api.setHeaders(true)).subscribe(
+            (data: any) => {
+                this.users = data.users;
                 this.api.hideLoad();
-                if(data.json().userHasNoMainImage == false) {
+                if(data.userHasNoMainImage == false) {
                     this.addUsers();
                     if (this.users.items.length > 3) {
                         this.addUsers();
@@ -50,6 +49,12 @@ export class ArenaPage {
                         }
                     }
                 }else{
+                    let alert = this.alertCtrl.create({
+                        title: data.alertMess.title,
+                        subTitle: data.alertMess.message,
+                        buttons: [data.alertMess.button]
+                    });
+                    alert.present();
                     this.navCtrl.push(RegisterPage,{user: {step: 3, register: false, userHasNoMainImage: true}});
                     this.navCtrl.remove(1);
                 }
@@ -140,9 +145,9 @@ export class ArenaPage {
     }
 
     sendLike(user){
-        this.http.post(this.api.url + '/user/like/' + user.id, {}, this.api.setHeaders(true)).subscribe(
-            data => {
-                //this.users = data.json().users;
+        this.api.http.post(this.api.url + '/user/like/' + user.id, {}, this.api.setHeaders(true)).subscribe(
+            (data: any) => {
+                //this.users = data.users;
                 //this.api.hideLoad();
                 //this.addUsers();
             }, err => {

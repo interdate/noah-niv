@@ -20,11 +20,11 @@
 
             <div class="mo-contlft">
                 <form>
-                    <!--<div class="mo-btmlink cf" *ngIf="invitation.approved != '1' && invitation.approved != '0' && invitation.userId != userId">-->
-                        <!--<a (click)="inviteSet(1)" class="redbtn-big">אישור הגעה</a>-->
-                        <!--<a (click)="inviteSet(0)" class="redbtn-big">סירוב</a>-->
-                        <!--<a (click)="inviteSet(2)" class="redbtn-big">קביעת דייט חדש</a>-->
-                    <!--</div>-->
+                    <div class="mo-btmlink cf" *ngIf="invitation.approved != '1' && invitation.approved != '0' && invitation.userId != userId">
+                        <a (click)="inviteSet(1)" class="redbtn-big">אישור הגעה</a>
+                        <a (click)="inviteSet(0)" class="redbtn-big">סירוב</a>
+                        <a (click)="inviteSet(2)" class="redbtn-big">קביעת דייט חדש</a>
+                    </div>
 
                     <div class="field">
                         <label>תאריך הפגישה</label>
@@ -128,9 +128,12 @@
                                             {{ invit.userHeight }} ס״מ, {{invit.userReligin}}, {{ invit.userMaritalStatus }}<br>
                                             <strong>הזמנה לדייט:</strong>  בתאריך {{ invit.d + '.' + invit.m + '.' + invit.y + ' ' + invit.h + ':' + invit.min }} ב{{ invit.placeName + ' ' + invit.placeStreet + ', ' + invit.placeCity }}
                                         </p>
-                                        <p class="status">
+                                        <p *ngIf="invit.status != 'החזר תשובה'" class="status">
                                             {{ invit.status }}
                                         </p>
+                                        <div *ngIf="invit.status == 'החזר תשובה'" class="btmlink">
+                                            <a>{{ invit.status }}</a>
+                                        </div>
                                     </div>
                                 </div>
                             </li>

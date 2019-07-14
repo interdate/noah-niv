@@ -7,13 +7,13 @@ import { HomePage } from '../pages/home/home';
 import {ApiQuery} from '../library/api-query';
 import * as $ from "jquery";
 import {LoginPage} from "../pages/login/login";
-import {Http} from '@angular/http';
 import {ContactPage} from "../pages/contact/contact"
 import {RegisterPage} from "../pages/register/register";
 import {NotificationPage} from "../pages/notification/notification";
 import {ChatPage} from "../pages/chat/chat";
 import {InboxPage} from "../pages/inbox/inbox";
 import {InvitationsPage} from "../pages/invitations/invitations";
+import { Push, PushObject, PushOptions } from '@ionic-native/push';
 
 @Component({
   templateUrl: 'app.html'
@@ -23,6 +23,7 @@ export class MyApp {
     @ViewChild(ViewController) viewCtrl: ViewController;
     @ViewChild(Content) content: Content;
     rootPage:any;
+    public pushObj: PushObject;
     pageGo: any;
     bingo: any;
     status: any = 'logout';
@@ -33,7 +34,7 @@ export class MyApp {
         public statusBar: StatusBar,
         public splashScreen: SplashScreen,
         public api: ApiQuery,
-        public http: Http
+        public push: Push,
     ) {
         splashScreen.show();
         api.storage.get('status').then((val) => {
@@ -50,6 +51,7 @@ export class MyApp {
             }
         });
         this.initializeApp();
+
     }
 
     initializeApp() {
@@ -65,10 +67,62 @@ export class MyApp {
                 }, 100);
             }
             //this.splashScreen.hide();
+            this.initPushNotification();
         });
         //this.showTest();
         this.getCounters();
         this.getBingo();
+
+    }
+
+    initPushNotification(){
+        if (!this.platform.is('cordova')) {
+            console.warn("Push notifications not initialized. Cordova is not available - Run in physical device");
+            return;
+        }
+        const options: PushOptions = {
+            android: {
+            },
+            ios: {
+                alert: 'true',
+                badge: true,
+                sound: 'false'
+            },
+            windows: {},
+            browser: {
+                pushServiceURL: 'http://push.api.phonegap.com/v1/push'
+            }
+        };
+
+        this.pushObj = this.push.init(options);
+
+        this.pushObj.on('registration').subscribe( (data: any) => {
+            //this.deviceToken = data.registrationId;
+            this.api.storage.set('deviceToken', data.registrationId);
+            console.log("device token ->", data.registrationId);
+            this.api.sendPhoneId(data.registrationId);
+            //alert(data.registrationId);
+            //TODO - send device token to server
+        });
+
+        this.pushObj.on('notification').subscribe( (data: any) => {
+            console.log("PUSH NOTIFICATION: " + JSON.stringify(data));
+            //if user using app and push notification comes
+            if (data.additionalData.foreground == false) {
+                this.api.storage.get('user_id').then((val) => {
+                    if (val) {
+                        this.nav.push(InboxPage);
+                    } else {
+                        this.nav.push(LoginPage);
+                    }
+                });
+
+            }
+        });
+
+        this.pushObj.on('error').subscribe( (e) => {
+            console.log("PUSH PLUGIN ERROR: " + JSON.stringify(e));
+        });
     }
 
     back(){
@@ -115,10 +169,10 @@ export class MyApp {
     getBingo(){
         this.api.storage.get('status').then((val) => {
             if (val) {
-                this.http.get(this.api.url + '/user/bingo', this.api.setHeaders(true)).subscribe(
-                    data => {
-                        console.log('bingo: ', data.json());
-                        this.bingo = data.json().bingo.items
+                this.api.http.get(this.api.url + '/user/bingo', this.api.setHeaders(true)).subscribe(
+                    (data: any) => {
+                        console.log('bingo: ', data);
+                        this.bingo = data.bingo.items
                         if(this.bingo.length > 0){
                             this.showSplash();
                         }
@@ -138,10 +192,10 @@ export class MyApp {
     getCounters(){
         this.api.storage.get('status').then((val) => {
             if (val) {
-                this.http.get(this.api.url + '/user/newMessagesCount',this.api.setHeaders(true)).subscribe(
-                    data => {
-                        console.log('newMessagesCount: ', data.json());
-                        this.counters = data.json().counters;
+                this.api.http.get(this.api.url + '/user/newMessagesCount',this.api.setHeaders(true)).subscribe(
+                    (data: any) => {
+                        console.log('newMessagesCount: ', data);
+                        this.counters = data.counters;
                         if(this.counters.newMessagesCount > 0){
                             $('.mo-notify').show();
                         }else{
@@ -208,9 +262,9 @@ export class MyApp {
             });
             $('body').append(div);
 
-            this.http.post(this.api.url + '/user/bingo/splashed',splash,this.api.setHeaders(true)).subscribe(
-                data => {
-                    console.log('splashed: ', data.json());
+            this.api.http.post(this.api.url + '/user/bingo/splashed',splash,this.api.setHeaders(true)).subscribe(
+                (data: any) => {
+                    console.log('splashed: ', data);
 
                 }, err => {
                     console.log('splashed: ', err);
@@ -249,20 +303,25 @@ export class MyApp {
 
     logout(){
         this.api.storage.remove('status');
-        this.http.get(this.api.url + '/user/logout', this.api.setHeaders(true)).subscribe(data => {
+        this.api.http.get(this.api.url + '/user/logout', this.api.setHeaders(true)).subscribe(data => {
             //alert(JSON.stringify(data));
-            console.log('logout: ', data.json());
-            $('#my_arena,#invitations,.mo-notify').hide();
-            this.api.storage.remove('user_id');
-            this.rootPage = LoginPage;
-            //this.nav.push(this.rootPage);
-            this.nav.setRoot(this.rootPage);
-            this.nav.popToRoot();
+            console.log('logout: ', data);
+            // $('#my_arena,#invitations,.mo-notify').hide();
+            // this.api.storage.remove('user_id');
+            // this.rootPage = LoginPage;
+            // //this.nav.push(this.rootPage);
+            // this.nav.setRoot(this.rootPage);
+            // this.nav.popToRoot();
         }, err => {
             console.log('logout: ', err);
 
         });
-
+        $('#my_arena,#invitations,.mo-notify').hide();
+        this.api.storage.remove('user_id');
+        this.rootPage = LoginPage;
+        //this.nav.push(this.rootPage);
+        this.nav.setRoot(this.rootPage);
+        this.nav.popToRoot();
 
     }
 
